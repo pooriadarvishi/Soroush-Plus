@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contact_nav"
     app:startDestination="@id/permissionFragment">
     <fragment
@@ -17,5 +16,11 @@
     <fragment
         android:id="@+id/contactFragment"
         android:name="com.example.soroushplusproject.ui.contact.ContactFragment"
-        android:label="ContactFragment" />
+        android:label="ContactFragment">
+        <action
+            android:id="@+id/action_contactFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment"
+            app:popUpTo="@id/contactFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
