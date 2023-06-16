@@ -1,4 +1,6 @@
 [versions]
+android = "8.0.2"
+androidKotlin = "1.8.20"
 androidxCore = "1.10.1"
 androidxAppCompat = "1.6.1"
 androidxConstraintLayout = "2.1.4"
@@ -22,3 +24,6 @@ junit-core = { group = "junit", name = "junit", version.ref = "junitCore" }
 
 
 [plugins]
+android-application = {id = "com.android.application", version.ref = "android"}
+android-library = {id = "com.android.library", version.ref = "android"}
+kotlin-android = {id = "android", version.ref = "androidKotlin" }
