@@ -30,6 +30,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -37,6 +40,9 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.legacy)
+    implementation(libs.androidx.lifecycle.livedata)
+    implementation(libs.androidx.lifecycle.viewmodel)
     testImplementation(libs.junit.core)
     implementation(libs.material.core)
     androidTestImplementation(libs.androidx.test.junit)

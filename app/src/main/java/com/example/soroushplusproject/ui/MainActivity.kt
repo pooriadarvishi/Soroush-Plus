@@ -1,7 +1,8 @@
-package com.example.soroushplusproject
+package com.example.soroushplusproject.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.soroushplusproject.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

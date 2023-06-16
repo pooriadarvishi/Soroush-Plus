@@ -6,6 +6,9 @@ androidxAppCompat = "1.6.1"
 androidxConstraintLayout = "2.1.4"
 androidxJunitTest = "1.1.5"
 androidxEspressoTest = "3.5.1"
+androidxLegacy = "1.0.0"
+andoidxLifecycle = "2.6.1"
+
 material = "1.9.0"
 junitCore = "4.13.2"
 
@@ -20,6 +23,9 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 androidx-test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspressoTest" }
 material-core = { group = "com.google.android.material", name = "material", version.ref = "material" }
 junit-core = { group = "junit", name = "junit", version.ref = "junitCore" }
+androidx-legacy = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "androidxLegacy" }
+androidx-lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "andoidxLifecycle" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "andoidxLifecycle" }
 
 
 
