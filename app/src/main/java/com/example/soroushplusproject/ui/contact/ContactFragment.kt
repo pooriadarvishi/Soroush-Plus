@@ -1,13 +1,14 @@
 package com.example.soroushplusproject.ui.contact
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentContactBinding
+import com.example.soroushplusproject.util.isGrantedPermission
 
 class ContactFragment : Fragment() {
     private lateinit var binding : FragmentContactBinding
@@ -15,9 +16,7 @@ class ContactFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentContactBinding.inflate(inflater)
         return binding.root
@@ -27,6 +26,17 @@ class ContactFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkPermission()
+    }
 
 
+    private fun checkPermission() {
+        if (!requireContext().isGrantedPermission()) navigateToPermission()
+    }
+
+    private fun navigateToPermission() {
+        findNavController().navigate(R.id.action_contactFragment_to_permissionFragment)
+    }
 }
