@@ -3,6 +3,7 @@ package com.example.soroushplusproject.ui.permission
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.soroushplusproject.R
@@ -28,9 +30,9 @@ class PermissionFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            permissionViewModel.permissionGranted()
+            permissionViewModel.onPermissionGranted()
         } else {
-            permissionViewModel.permissionDenied()
+            permissionViewModel.onPermissionDenied()
         }
     }
 
@@ -45,15 +47,15 @@ class PermissionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnGetContact.setOnClickListener {
-            if (permissionViewModel.showPermissionState()) {
-
-                permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
-            } else {
-                showPermissionDeniedDialog()
-            }
-        }
+        setUi()
     }
+
+    private fun setUi() {
+        observePermission()
+        checkPermission()
+        onSetClickBtnGetContact()
+    }
+
 
     private fun observePermission() {
         permissionViewModel.permissionState.observe(viewLifecycleOwner) { isGranted ->
@@ -62,7 +64,28 @@ class PermissionFragment : Fragment() {
         }
     }
 
-    private fun showPermissionDeniedDialog() {
+
+    private fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) permissionViewModel.onPermissionGranted()
+    }
+
+
+    private fun onSetClickBtnGetContact() {
+        binding.btnGetContact.setOnClickListener {
+            if (permissionViewModel.showPermissionState()) {
+
+                permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            } else {
+                onShowPermissionDeniedDialog()
+            }
+        }
+    }
+
+
+    private fun onShowPermissionDeniedDialog() {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setMessage(getString(R.string.access_of_setting)).setCancelable(false)
             .setPositiveButton(getString(R.string.setting)) { _, _ ->

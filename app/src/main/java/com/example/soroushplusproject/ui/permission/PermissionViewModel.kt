@@ -12,12 +12,12 @@ class PermissionViewModel : ViewModel() {
 
     fun showPermissionState() = showPermissionRequestState
 
-    fun permissionDenied() {
+    fun onPermissionDenied() {
         _permissionState.postValue(false)
         showPermissionRequestState = false
     }
 
-    fun permissionGranted() {
+    fun onPermissionGranted() {
         _permissionState.postValue(true)
         showPermissionRequestState = true
     }
