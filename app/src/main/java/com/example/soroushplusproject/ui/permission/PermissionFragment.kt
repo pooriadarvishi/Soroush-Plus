@@ -3,7 +3,6 @@ package com.example.soroushplusproject.ui.permission
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -11,12 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentPermissionBinding
+import com.example.soroushplusproject.util.isGrantedPermission
 
 class PermissionFragment : Fragment() {
 
@@ -69,10 +68,7 @@ class PermissionFragment : Fragment() {
 
 
     private fun checkPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) permissionViewModel.onPermissionGranted()
+        if (requireContext().isGrantedPermission()) permissionViewModel.onPermissionGranted()
     }
 
 
@@ -107,3 +103,5 @@ class PermissionFragment : Fragment() {
         startActivity(intent)
     }
 }
+
+
