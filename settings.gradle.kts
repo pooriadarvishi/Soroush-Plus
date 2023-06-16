@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Soroush Plus Project"
-include ':app'
+include(":app")
