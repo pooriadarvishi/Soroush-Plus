@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -35,6 +37,9 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -53,5 +58,8 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso)
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
-//    kapt(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.hilt.core)
+    kapt("com.google.dagger:hilt-android-compiler:2.46.1")
+    kapt("androidx.room:room-compiler:2.5.1")
 }
