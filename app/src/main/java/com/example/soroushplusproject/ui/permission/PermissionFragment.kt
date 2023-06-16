@@ -45,7 +45,14 @@ class PermissionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnGetContact.setOnClickListener { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }
+        binding.btnGetContact.setOnClickListener {
+            if (permissionViewModel.showPermissionState()) {
+
+                permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+            } else {
+                showPermissionDeniedDialog()
+            }
+        }
     }
 
     private fun observePermission() {
@@ -59,14 +66,18 @@ class PermissionFragment : Fragment() {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setMessage(getString(R.string.access_of_setting)).setCancelable(false)
             .setPositiveButton(getString(R.string.setting)) { _, _ ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", requireActivity().packageName, null)
-                intent.data = uri
-                startActivity(intent)
+                setIntentSetting()
             }.setNegativeButton(getString(R.string.never_mind)) { dialog, _ ->
                 dialog.cancel()
             }
         val alert = alertDialogBuilder.create()
         alert.show()
+    }
+
+    private fun setIntentSetting() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireActivity().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
 }

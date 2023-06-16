@@ -8,12 +8,17 @@ class PermissionViewModel : ViewModel() {
     private val _permissionState = MutableLiveData(false)
     val permissionState: LiveData<Boolean> = _permissionState
 
+    private var showPermissionRequestState = true
+
+    fun showPermissionState() = showPermissionRequestState
 
     fun permissionDenied() {
         _permissionState.postValue(false)
+        showPermissionRequestState = false
     }
 
     fun permissionGranted() {
         _permissionState.postValue(true)
+        showPermissionRequestState = true
     }
 }
