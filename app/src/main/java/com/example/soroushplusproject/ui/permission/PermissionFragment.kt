@@ -54,4 +54,19 @@ class PermissionFragment : Fragment() {
             Log.e(TAG, "observePermission: navigate")
         }
     }
+
+    private fun showPermissionDeniedDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setMessage(getString(R.string.access_of_setting)).setCancelable(false)
+            .setPositiveButton(getString(R.string.setting)) { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }.setNegativeButton(getString(R.string.never_mind)) { dialog, _ ->
+                dialog.cancel()
+            }
+        val alert = alertDialogBuilder.create()
+        alert.show()
+    }
 }
