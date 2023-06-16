@@ -9,9 +9,10 @@ androidxEspressoTest = "3.5.1"
 androidxLegacy = "1.0.0"
 andoidxLifecycle = "2.6.1"
 andoidxNavigation = "2.6.0"
-
+androidxRoom = "2.5.1"
 material = "1.9.0"
 junitCore = "4.13.2"
+
 
 
 
@@ -27,6 +28,8 @@ androidx-lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "andoidxLifecycle" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "andoidxNavigation" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "andoidxNavigation" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "andoidxNavigation" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "andoidxNavigation" }
 
 material-core = { group = "com.google.android.material", name = "material", version.ref = "material" }
 junit-core = { group = "junit", name = "junit", version.ref = "junitCore" }
