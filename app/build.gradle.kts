@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.androidx.legacy)
     implementation(libs.androidx.lifecycle.livedata)
     implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
     testImplementation(libs.junit.core)
     implementation(libs.material.core)
     androidTestImplementation(libs.androidx.test.junit)
