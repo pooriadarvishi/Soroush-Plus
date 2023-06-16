@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Soroush Plus Project</string>
     <string name="get_contact">Get Contact</string>
+    <string name="access_of_setting">Please enable access to contacts.</string>
+    <string name="setting">setting</string>
+    <string name="never_mind">never mind</string>
 </resources>
