@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +14,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentPermissionBinding
 
 class PermissionFragment : Fragment() {
-    companion object {
-        const val TAG = "Permission"
-    }
-
 
     private lateinit var binding: FragmentPermissionBinding
     private val permissionViewModel: PermissionViewModel by viewModels()
@@ -44,6 +40,11 @@ class PermissionFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkPermission()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,16 +53,18 @@ class PermissionFragment : Fragment() {
 
     private fun setUi() {
         observePermission()
-        checkPermission()
         onSetClickBtnGetContact()
     }
 
 
     private fun observePermission() {
         permissionViewModel.permissionState.observe(viewLifecycleOwner) { isGranted ->
-            // TODO navigate
-            Log.e(TAG, "observePermission: navigate")
+            if (isGranted) onNavigateToContact()
         }
+    }
+
+    private fun onNavigateToContact() {
+        findNavController().navigate(R.id.action_permissionFragment_to_contactFragment)
     }
 
 
