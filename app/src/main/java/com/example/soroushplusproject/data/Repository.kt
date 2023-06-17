@@ -18,7 +18,9 @@ class Repository @Inject constructor(
     private val entityToDetails: EntityToDetails,
 ) {
     suspend fun insertAllContact() {
-        contactDao.insertContacts(contactProvider.getContacts())
+        if (contactDao.getAllIdContacts().isEmpty()) {
+            contactDao.insertContacts(contactProvider.getContacts())
+        }
     }
 
     fun getAllContact(): Flow<List<ContactItem>> =
