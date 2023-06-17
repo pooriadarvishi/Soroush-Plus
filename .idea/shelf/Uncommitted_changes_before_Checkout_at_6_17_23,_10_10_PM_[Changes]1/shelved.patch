@@ -1,0 +1,17 @@
+Index: app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt b/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt
+--- a/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt	
++++ b/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt	
+@@ -29,6 +29,8 @@
+ 
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
++        contactViewModel.insertContact()
++        contactViewModel.getData()
+     }
+ 
+     override fun onResume() {
