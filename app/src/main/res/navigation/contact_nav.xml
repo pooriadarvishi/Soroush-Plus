@@ -35,5 +35,8 @@
             app:destination="@id/permissionFragment"
             app:popUpTo="@id/detailsFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="contact_id"
+            app:argType="integer" />
     </fragment>
 </navigation>
