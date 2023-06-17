@@ -33,7 +33,7 @@
         <action
             android:id="@+id/action_detailsFragment_to_permissionFragment"
             app:destination="@id/permissionFragment"
-            app:popUpTo="@id/detailsFragment"
+            app:popUpTo="@id/contactFragment"
             app:popUpToInclusive="true" />
         <argument
             android:name="contact_id"
