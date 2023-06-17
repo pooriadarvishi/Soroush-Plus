@@ -38,6 +38,10 @@ class Repository @Inject constructor(
         deletedContacts.forEach { contactDao.deleteContactById(it) }
     }
 
+    suspend fun syncContact(contactId: Int) {
+        contactDao.updateContact(contactProvider.getContactsById(contactId.toString()))
+    }
+
 
     fun getAllContact(): Flow<List<ContactItem>> =
         contactDao.getAllContacts().map { entityToItem.map(it) }
