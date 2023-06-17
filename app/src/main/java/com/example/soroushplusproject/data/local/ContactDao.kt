@@ -12,11 +12,14 @@ interface ContactDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertContacts(Contacts: List<ContactEntity>)
 
-    @Query("SELECT * FROM contact_table")
+    @Query("SELECT * FROM contact_table ORDER BY name ASC")
     fun getAllContacts(): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contact_table WHERE id = :id")
     fun getContactById(id: Int): Flow<ContactEntity>
+
+    @Query("DELETE FROM contact_table WHERE id = :id")
+    suspend fun deleteContactById(id: Int)
 
     @Query("SELECT id FROM contact_table")
     suspend fun getAllIdContacts(): List<Int>
