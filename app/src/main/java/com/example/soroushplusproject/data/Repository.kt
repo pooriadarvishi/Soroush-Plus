@@ -7,6 +7,4 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val contactDao: ContactDao) {
 
-    fun getContact(): Flow<List<ContactEntity>> = contactDao.getContacts()
-
 }

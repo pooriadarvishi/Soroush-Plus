@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey
 data class ContactEntity(
     @ColumnInfo("id")
     @PrimaryKey(false)
-    val id: Int?,
+    var id: Int? = null,
     @ColumnInfo("name")
-    val name: String?,
+    var name: String? = null,
     @ColumnInfo("number")
-    val number: String?,
+    var number: String? = null,
     @ColumnInfo("email")
-    val Email: String?,
+    var email: String? = null,
     @ColumnInfo("image")
-    val image: String?,
+    var image: String? = null,
 )
