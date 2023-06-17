@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soroushplusproject.R
@@ -21,6 +22,7 @@ class ContactFragment : Fragment() {
     private val contactViewModel: ContactViewModel by viewModels()
     private lateinit var binding: FragmentContactBinding
     private lateinit var adapter: ContactAdapter
+    private lateinit var navController: NavController
 
 
     override fun onCreateView(
@@ -46,16 +48,25 @@ class ContactFragment : Fragment() {
     }
 
     private fun navigateToPermission() {
-        findNavController().navigate(R.id.action_contactFragment_to_permissionFragment)
+        navController.navigate(R.id.action_contactFragment_to_permissionFragment)
     }
 
 
     private fun setRecyclerView() {
-        adapter = ContactAdapter()
+        navController = findNavController()
+        adapter = ContactAdapter { navigateToDetails(it) }
         binding.apply {
             rvContacts.adapter = adapter
             rvContacts.layoutManager = LinearLayoutManager(requireContext())
         }
+    }
+
+    private fun navigateToDetails(contactId: Int) {
+        navController.navigate(
+            ContactFragmentDirections.actionContactFragmentToDetailsFragment(
+                contactId
+            )
+        )
     }
 
     private fun onObserve() {
