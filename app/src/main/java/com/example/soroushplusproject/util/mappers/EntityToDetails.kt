@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 class EntityToDetails @Inject constructor() : Mapper<ContactEntity, ContactDetails> {
     override fun map(from: ContactEntity): ContactDetails =
-        with(from) { ContactDetails(id, name, number, email, image) }
+        with(from) { ContactDetails(id, name, phoneNumber, email, image) }
 }

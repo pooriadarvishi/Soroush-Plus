@@ -12,7 +12,7 @@ data class ContactEntity(
     @ColumnInfo("name")
     var name: String? = null,
     @ColumnInfo("number")
-    var number: String? = null,
+    var phoneNumber: String? = null,
     @ColumnInfo("email")
     var email: String? = null,
     @ColumnInfo("image")

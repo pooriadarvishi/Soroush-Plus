@@ -57,7 +57,7 @@ class ContactProvider(private val context: Context) {
                 phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
             while (phoneCursor.moveToNext()) {
                 if (phoneCursor.getInt(hasPhoneNumberIndex) > 0) {
-                    contact.number = phoneCursor.getString(numberIndex)
+                    contact.phoneNumber = phoneCursor.getString(numberIndex)
                 }
             }
             phoneCursor.close()
