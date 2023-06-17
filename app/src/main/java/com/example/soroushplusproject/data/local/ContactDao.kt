@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContactDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertContacts(vararg Contacts: ContactEntity)
+    suspend fun insertContacts(Contacts: List<ContactEntity>)
 
     @Query("SELECT * FROM contact_table")
     fun getAllContacts(): Flow<List<ContactEntity>>
