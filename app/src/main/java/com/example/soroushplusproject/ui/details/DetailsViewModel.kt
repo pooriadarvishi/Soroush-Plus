@@ -9,6 +9,7 @@ import com.example.soroushplusproject.data.Repository
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.util.CONTACT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +25,8 @@ class DetailsViewModel @Inject constructor(
 
     private val contactId = stateHandle.get<Int>(CONTACT_ID)
 
+    private var job: Job? = null
+
     init {
         contactId?.let { getContactById(it) }
     }
@@ -37,5 +40,10 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-
+    fun sync() {
+        job?.cancel()
+        job = viewModelScope.launch {
+            contactId?.let { repository.syncContact(it) }
+        }
+    }
 }

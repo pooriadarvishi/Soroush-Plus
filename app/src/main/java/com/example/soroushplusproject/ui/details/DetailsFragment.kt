@@ -55,6 +55,7 @@ class DetailsFragment : Fragment() {
 
     private fun checkPermission() {
         if (!requireContext().isGrantedPermission()) navigateToPermission()
+        else detailsViewModel.sync()
     }
 
     private fun navigateToPermission() {
