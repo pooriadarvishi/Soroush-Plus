@@ -10,11 +10,12 @@ class ContactProvider(private val context: Context) {
 
     @SuppressLint("Range")
     fun getContacts(): List<ContactEntity> {
-        val contentResolver: ContentResolver = context.contentResolver
-        return setContactInfo(contentResolver)
+        return setContactInfo()
     }
 
-    private fun setContactInfo(contentResolver: ContentResolver): MutableList<ContactEntity> {
+    private fun setContactInfo(): MutableList<ContactEntity> {
+        val contentResolver: ContentResolver = context.contentResolver
+
         val contacts = mutableListOf<ContactEntity>()
         contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI, null, null, null, null
@@ -72,9 +73,7 @@ class ContactProvider(private val context: Context) {
         contentResolver.query(
             ContactsContract.CommonDataKinds.Email.CONTENT_URI,
             null,
-            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-            arrayOf(id),
-            null
+            ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", arrayOf(id), null
         )?.use { emailCursor ->
             val emailIndex =
                 emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS)
@@ -82,6 +81,29 @@ class ContactProvider(private val context: Context) {
                 contact.email = emailCursor.getString(emailIndex)
             }
         }
+    }
+
+
+    fun getContactsById(id: String): ContactEntity {
+        val contentResolver: ContentResolver = context.contentResolver
+        val contact = ContactEntity()
+        contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI, null, "$id = ?", arrayOf(id), null
+        )?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+            cursor.moveToNext()
+            contact.apply {
+                this.id = id.toInt()
+                name = cursor.getString(nameIndex)
+                image = cursor.getString(photoIndex)
+
+                setContactNumber(id, this, contentResolver)
+
+                setContactEmail(id, this, contentResolver)
+            }
+        }
+        return contact
     }
 
 
