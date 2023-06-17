@@ -22,5 +22,18 @@
             app:destination="@id/permissionFragment"
             app:popUpTo="@id/contactFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_contactFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.soroushplusproject.ui.details.DetailsFragment"
+        android:label="DetailsFragment">
+        <action
+            android:id="@+id/action_detailsFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment"
+            app:popUpTo="@id/detailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
