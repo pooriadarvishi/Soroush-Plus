@@ -5,4 +5,8 @@
     <string name="setting">setting</string>
     <string name="never_mind">never mind</string>
     <string name="pooria_darvishi">Pooria Darvishi</string>
+    <string name="phone_number">PhoneNumber:</string>
+    <string name="phone_number_example">09202122515</string>
+    <string name="email_example">pooria.darvishi.82@gmail.com</string>
+    <string name="contact_info">Contact Info:</string>
 </resources>
