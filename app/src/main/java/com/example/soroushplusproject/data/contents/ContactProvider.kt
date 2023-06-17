@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.ContactsContract
+import android.util.Log
 import com.example.soroushplusproject.data.model.ContactEntity
 
 class ContactProvider(private val context: Context) {
@@ -38,6 +39,7 @@ class ContactProvider(private val context: Context) {
                 }
                 contacts.add(contact)
             }
+            cursor.close()
         }
         return contacts
     }
@@ -88,7 +90,7 @@ class ContactProvider(private val context: Context) {
         val contentResolver: ContentResolver = context.contentResolver
         val contact = ContactEntity()
         contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI, null, "$id = ?", arrayOf(id), null
+            ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID+ " = ?", arrayOf(id), null
         )?.use { cursor ->
             val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
@@ -102,6 +104,7 @@ class ContactProvider(private val context: Context) {
 
                 setContactEmail(id, this, contentResolver)
             }
+            cursor.close()
         }
         return contact
     }
