@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.soroushplusproject.data.Repository
 import com.example.soroushplusproject.ui.models.ContactItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,6 +17,9 @@ import javax.inject.Inject
 class ContactViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     private val _contacts = MutableLiveData<List<ContactItem>>()
     val contacts: LiveData<List<ContactItem>> = _contacts
+
+    private var job: Job? = null
+
 
     init {
         getContacts()
@@ -31,13 +35,15 @@ class ContactViewModel @Inject constructor(private val repository: Repository) :
     }
 
     private fun insertContact() {
-        viewModelScope.launch {
+        job?.cancel()
+        job = viewModelScope.launch {
             repository.insertAllContact()
         }
     }
 
     fun sync() {
-        viewModelScope.launch {
+        job?.cancel()
+        job = viewModelScope.launch {
             repository.syncContacts()
         }
     }
