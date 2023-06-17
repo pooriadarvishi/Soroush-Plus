@@ -2,6 +2,8 @@ package com.example.soroushplusproject.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.soroushplusproject.data.contents.ContactProvider
+import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.data.local.ContactDataBase
 import dagger.Module
 import dagger.Provides
@@ -21,5 +23,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDao(contactDataBase: ContactDataBase) = contactDataBase.contactDao()
+    fun provideDao(contactDataBase: ContactDataBase): ContactDao = contactDataBase.contactDao()
+
+
+    @Provides
+    @Singleton
+    fun provideContactProvider(application: Application): ContactProvider =
+        ContactProvider(application)
 }
