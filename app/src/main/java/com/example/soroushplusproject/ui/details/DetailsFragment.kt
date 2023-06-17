@@ -6,8 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
+import com.example.soroushplusproject.ui.models.ContactDetails
+import com.example.soroushplusproject.util.isGrantedPermission
+import com.example.soroushplusproject.util.loadImage
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
@@ -21,6 +29,35 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onObserve()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        checkPermission()
+
+    }
+
+    private fun onBind(contactDetails: ContactDetails) {
+        binding.apply {
+            tvPhoneNumber.text = contactDetails.phoneNumber
+            tvEmail.text = contactDetails.email
+            tvNameContact.text = contactDetails.name
+            contactDetails.image?.let { igContactProfile.loadImage(it) }
+        }
+    }
+
+    private fun onObserve() {
+        detailsViewModel.contact.observe(viewLifecycleOwner) { contact ->
+            onBind(contact)
+        }
+    }
+
+    private fun checkPermission() {
+        if (!requireContext().isGrantedPermission()) navigateToPermission()
+    }
+
+    private fun navigateToPermission() {
+        findNavController().navigate(R.id.action_detailsFragment_to_permissionFragment)
     }
 }
