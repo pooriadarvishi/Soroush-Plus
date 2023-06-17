@@ -23,6 +23,22 @@ class Repository @Inject constructor(
         }
     }
 
+
+    suspend fun syncContacts() {
+        val contacts = contactProvider.getContacts()
+        contactDao.insertContacts(contacts)
+        syncDeletedContacts()
+    }
+
+
+    private suspend fun syncDeletedContacts() {
+        val localContacts = contactDao.getAllIdContacts()
+        val mobileContacts = contactProvider.getIdsContacts()
+        val deletedContacts = localContacts.filter { it !in mobileContacts }
+        deletedContacts.forEach { contactDao.deleteContactById(it) }
+    }
+
+
     fun getAllContact(): Flow<List<ContactItem>> =
         contactDao.getAllContacts().map { entityToItem.map(it) }
 

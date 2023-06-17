@@ -85,4 +85,17 @@ class ContactProvider(private val context: Context) {
     }
 
 
+    fun getIdsContacts(): List<Int> {
+        val contentResolver: ContentResolver = context.contentResolver
+        val contactsIds = mutableListOf<Int>()
+        contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI, null, null, null, null
+        )?.use { cursor ->
+            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)
+            while (cursor.moveToNext()) {
+                contactsIds.add(cursor.getString(contactIdIndex).toInt())
+            }
+        }
+        return contactsIds
+    }
 }
