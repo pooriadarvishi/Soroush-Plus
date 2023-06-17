@@ -36,4 +36,9 @@ class ContactViewModel @Inject constructor(private val repository: Repository) :
         }
     }
 
+    fun sync() {
+        viewModelScope.launch {
+            repository.syncContacts()
+        }
+    }
 }

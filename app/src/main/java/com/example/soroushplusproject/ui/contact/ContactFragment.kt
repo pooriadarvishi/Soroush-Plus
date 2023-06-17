@@ -45,6 +45,7 @@ class ContactFragment : Fragment() {
 
     private fun checkPermission() {
         if (!requireContext().isGrantedPermission()) navigateToPermission()
+        else contactViewModel.sync()
     }
 
     private fun navigateToPermission() {
