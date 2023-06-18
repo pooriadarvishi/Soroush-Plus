@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentContactBinding
 import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
 import com.example.soroushplusproject.util.isGrantedPermission
@@ -42,14 +41,12 @@ class ContactFragment : Fragment() {
         checkPermission()
     }
 
-
-    private fun checkPermission() {
-        if (!requireContext().isGrantedPermission()) navigateToPermission()
-        else contactViewModel.sync()
+    private fun sync() {
+        contactViewModel.sync()
     }
 
-    private fun navigateToPermission() {
-        navController.navigate(R.id.action_contactFragment_to_permissionFragment)
+    private fun checkPermission() {
+        if (requireContext().isGrantedPermission()) sync()
     }
 
 
