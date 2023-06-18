@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/contact_nav"
-    app:startDestination="@id/permissionFragment">
-    <fragment
-        android:id="@+id/permissionFragment"
-        android:name="com.example.soroushplusproject.ui.permission.PermissionFragment"
-        android:label="PermissionFragment" >
-        <action
-            android:id="@+id/action_permissionFragment_to_contactFragment"
-            app:destination="@id/contactFragment"
-            app:popUpTo="@id/permissionFragment"
-            app:popUpToInclusive="true"/>
-    </fragment>
+    android:id="@+id/contact_nav">
     <fragment
         android:id="@+id/contactFragment"
         android:name="com.example.soroushplusproject.ui.contact.ContactFragment"
         android:label="ContactFragment">
-        <action
-            android:id="@+id/action_contactFragment_to_permissionFragment"
-            app:destination="@id/permissionFragment"
-            app:popUpTo="@id/contactFragment"
-            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_contactFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -30,11 +14,6 @@
         android:id="@+id/detailsFragment"
         android:name="com.example.soroushplusproject.ui.details.DetailsFragment"
         android:label="DetailsFragment">
-        <action
-            android:id="@+id/action_detailsFragment_to_permissionFragment"
-            app:destination="@id/permissionFragment"
-            app:popUpTo="@id/contactFragment"
-            app:popUpToInclusive="true" />
         <argument
             android:name="contact_id"
             app:argType="integer" />

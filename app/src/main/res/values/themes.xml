@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.SoroushPlusProject" parent="Base.Theme.SoroushPlusProject" />
+
+    <color name="button">@color/purple_light</color>
+    <color name="icon">@color/black</color>
 </resources>
