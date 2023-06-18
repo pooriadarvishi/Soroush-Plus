@@ -1,35 +1,70 @@
 package com.example.soroushplusproject.data.contents
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
+import android.database.ContentObserver
 import android.provider.ContactsContract
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.data.model.ContactEntity
+import com.example.soroushplusproject.util.isGrantedPermission
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class ContactProvider(private val context: Context) {
+class ContactProvider(private val context: Context, private val contactDao: ContactDao) :
+    ContentObserver(null) {
+    companion object {
+        const val APP_PERF = "app_prefs"
+        const val LAST_UPDATE_TIME = "last_update_time"
 
-    @SuppressLint("Range")
-    fun getContacts(): List<ContactEntity> {
-        return setContactInfo()
     }
 
-    private fun setContactInfo(): MutableList<ContactEntity> {
-        val contentResolver: ContentResolver = context.contentResolver
+    private var job = Job()
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
+
+    override fun onChange(selfChange: Boolean) {
+        super.onChange(selfChange)
+        job.cancel()
+        if (context.isGrantedPermission()) coroutineScope.launch { syncContacts() }
+    }
+
+    suspend fun syncContacts() {
+        contactDao.insertContacts(newContacts())
+        deletedContacts().forEach { contactDao.deleteContactById(it) }
+    }
+
+
+    private fun newContacts(): MutableList<ContactEntity> {
+        val contentResolver: ContentResolver = context.contentResolver
         val contacts = mutableListOf<ContactEntity>()
+        var lastUpdateTime = getLastUpdateTime()
+
+
         contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI, null, null, null, null
+            ContactsContract.Contacts.CONTENT_URI,
+            null,
+            "${ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP} > ?",
+            arrayOf(lastUpdateTime.toString()),
+            null,
+            null
         )?.use { cursor ->
             val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)
             val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+            val updateIndex =
+                cursor.getColumnIndex(ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP)
             while (cursor.moveToNext()) {
                 val contact = ContactEntity().apply {
                     val sId = cursor.getString(contactIdIndex)
+                    val updateTime = cursor.getLong(updateIndex)
+                    if (updateTime > lastUpdateTime) lastUpdateTime = updateTime
 
                     name = cursor.getString(nameIndex)
                     image = cursor.getString(photoIndex)
+
 
                     setContactNumber(sId, this, contentResolver)
 
@@ -41,6 +76,7 @@ class ContactProvider(private val context: Context) {
             }
             cursor.close()
         }
+        setLastUpdateTime(lastUpdateTime)
         return contacts
     }
 
@@ -86,41 +122,47 @@ class ContactProvider(private val context: Context) {
     }
 
 
-    fun getContactsById(id: String): ContactEntity {
-        val contentResolver: ContentResolver = context.contentResolver
-        val contact = ContactEntity()
-        contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID+ " = ?", arrayOf(id), null
-        )?.use { cursor ->
-            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
-            cursor.moveToNext()
-            contact.apply {
-                this.id = id.toInt()
-                name = cursor.getString(nameIndex)
-                image = cursor.getString(photoIndex)
+    private fun deletedContacts(): MutableList<Int> {
+        var lastUpdateTime = getLastUpdateTime()
+        val deletedContactIds = mutableListOf<Int>()
+        val cursor = context.contentResolver.query(
+            ContactsContract.DeletedContacts.CONTENT_URI,
+            null,
+            "${ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP} > ?",
+            arrayOf(lastUpdateTime.toString()),
+            null
+        )
+        cursor?.use { cursor ->
 
-                setContactNumber(id, this, contentResolver)
-
-                setContactEmail(id, this, contentResolver)
-            }
-            cursor.close()
-        }
-        return contact
-    }
-
-
-    fun getIdsContacts(): List<Int> {
-        val contentResolver: ContentResolver = context.contentResolver
-        val contactsIds = mutableListOf<Int>()
-        contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI, null, null, null, null
-        )?.use { cursor ->
-            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)
+            val contactIdIndex = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
+            val updateIndex =
+                cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
             while (cursor.moveToNext()) {
-                contactsIds.add(cursor.getString(contactIdIndex).toInt())
+
+                deletedContactIds.add(cursor.getLong(contactIdIndex).toInt())
+                val updateTime = cursor.getLong(updateIndex)
+                if (updateTime > lastUpdateTime) lastUpdateTime = updateTime
             }
+            setLastUpdateTime(lastUpdateTime)
         }
-        return contactsIds
+        return deletedContactIds
     }
+
+
+    private fun getLastUpdateTime(): Long {
+        val sharedPreferences =
+            context.getSharedPreferences(APP_PERF, AppCompatActivity.MODE_PRIVATE)
+        return sharedPreferences.getLong(LAST_UPDATE_TIME, 0)
+    }
+
+    private fun setLastUpdateTime(lastUpdateTime: Long) {
+        val sharedPreferences =
+            context.getSharedPreferences(APP_PERF, AppCompatActivity.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putLong(LAST_UPDATE_TIME, lastUpdateTime)
+            apply()
+        }
+    }
+
+
 }

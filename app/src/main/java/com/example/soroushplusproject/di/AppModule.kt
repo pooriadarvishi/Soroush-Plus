@@ -28,6 +28,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideContactProvider(application: Application): ContactProvider =
-        ContactProvider(application)
+    fun provideContactProvider(application: Application, contactDao: ContactDao): ContactProvider =
+        ContactProvider(application, contactDao)
 }

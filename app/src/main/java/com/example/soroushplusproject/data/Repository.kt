@@ -17,29 +17,10 @@ class Repository @Inject constructor(
     private val entityToItem: EntityToItem,
     private val entityToDetails: EntityToDetails,
 ) {
-    suspend fun insertAllContact() {
-        if (contactDao.getAllIdContacts().isEmpty()) {
-            contactDao.insertContacts(contactProvider.getContacts())
-        }
-    }
 
 
     suspend fun syncContacts() {
-        val contacts = contactProvider.getContacts()
-        contactDao.insertContacts(contacts)
-        syncDeletedContacts()
-    }
-
-
-    private suspend fun syncDeletedContacts() {
-        val localContacts = contactDao.getAllIdContacts()
-        val mobileContacts = contactProvider.getIdsContacts()
-        val deletedContacts = localContacts.filter { it !in mobileContacts }
-        deletedContacts.forEach { contactDao.deleteContactById(it) }
-    }
-
-    suspend fun syncContact(contactId: Int) {
-        contactDao.updateContact(contactProvider.getContactsById(contactId.toString()))
+        contactProvider.syncContacts()
     }
 
 
