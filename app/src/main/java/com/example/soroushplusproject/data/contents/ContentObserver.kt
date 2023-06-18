@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class ContactProvider(private val context: Context, private val contactDao: ContactDao) :
+class ContentObserver(private val context: Context, private val contactDao: ContactDao) :
     ContentObserver(null) {
     companion object {
         const val APP_PERF = "app_prefs"

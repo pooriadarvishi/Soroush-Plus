@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.soroushplusproject.databinding.ContactItemReBinding
 import com.example.soroushplusproject.ui.models.ContactItem
-import com.example.soroushplusproject.util.onClickContact
 
-class ContactAdapter(val onCLick: onClickContact) :
+class ContactAdapter(private val onCLick: onClickContact) :
     ListAdapter<ContactItem, ContactViewHolder>(object : DiffUtil.ItemCallback<ContactItem>() {
         override fun areItemsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean =
             oldItem.id == newItem.id

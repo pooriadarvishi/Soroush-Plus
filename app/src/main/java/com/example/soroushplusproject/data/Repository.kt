@@ -1,6 +1,6 @@
 package com.example.soroushplusproject.data
 
-import com.example.soroushplusproject.data.contents.ContactProvider
+import com.example.soroushplusproject.data.contents.ContentObserver
 import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.ui.models.ContactItem
@@ -13,14 +13,14 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(
     private val contactDao: ContactDao,
-    private val contactProvider: ContactProvider,
+    private val contentObserver: ContentObserver,
     private val entityToItem: EntityToItem,
     private val entityToDetails: EntityToDetails,
 ) {
 
 
     suspend fun syncContacts() {
-        contactProvider.syncContacts()
+        contentObserver.syncContacts()
     }
 
 

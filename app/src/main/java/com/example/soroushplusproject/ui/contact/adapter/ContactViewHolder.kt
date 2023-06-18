@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.soroushplusproject.databinding.ContactItemReBinding
 import com.example.soroushplusproject.ui.models.ContactItem
 import com.example.soroushplusproject.util.loadImage
-import com.example.soroushplusproject.util.onClickContact
 
 class ContactViewHolder(private val binding: ContactItemReBinding, onClick: onClickContact) :
     RecyclerView.ViewHolder(binding.root) {

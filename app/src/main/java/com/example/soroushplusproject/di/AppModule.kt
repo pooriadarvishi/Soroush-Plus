@@ -2,7 +2,7 @@ package com.example.soroushplusproject.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.soroushplusproject.data.contents.ContactProvider
+import com.example.soroushplusproject.data.contents.ContentObserver
 import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.data.local.ContactDataBase
 import dagger.Module
@@ -28,6 +28,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideContactProvider(application: Application, contactDao: ContactDao): ContactProvider =
-        ContactProvider(application, contactDao)
+    fun provideContactProvider(application: Application, contactDao: ContactDao): ContentObserver =
+        ContentObserver(application, contactDao)
 }

@@ -6,7 +6,7 @@ import android.provider.ContactsContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.soroushplusproject.R
-import com.example.soroushplusproject.data.contents.ContactProvider
+import com.example.soroushplusproject.data.contents.ContentObserver
 import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.isGrantedPermission
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
 
     @Inject
-    lateinit var contactProvider: ContactProvider
+    lateinit var contentObserver: ContentObserver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         resolver.registerContentObserver(
             ContactsContract.DeletedContacts.CONTENT_URI,
             true,
-            contactProvider
+            contentObserver
         )
     }
 }
