@@ -125,14 +125,13 @@ class ContentObserver(private val context: Context, private val contactDao: Cont
     private fun deletedContacts(): MutableList<Int> {
         var lastUpdateTime = getLastUpdateTime()
         val deletedContactIds = mutableListOf<Int>()
-        val cursor = context.contentResolver.query(
+        context.contentResolver.query(
             ContactsContract.DeletedContacts.CONTENT_URI,
             null,
             "${ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP} > ?",
             arrayOf(lastUpdateTime.toString()),
             null
-        )
-        cursor?.use { cursor ->
+        )?.use { cursor ->
 
             val contactIdIndex = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
             val updateIndex =

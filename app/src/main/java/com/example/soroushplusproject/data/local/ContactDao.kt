@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContactDao {
     @Upsert
-    suspend fun insertContacts(Contacts: List<ContactEntity>)
+    suspend fun insertContacts(contacts: List<ContactEntity>)
 
     @Query("SELECT * FROM contact_table ORDER BY name ASC")
     fun getAllContacts(): Flow<List<ContactEntity>>
