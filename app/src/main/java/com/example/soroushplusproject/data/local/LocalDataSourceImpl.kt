@@ -8,9 +8,8 @@ import com.example.soroushplusproject.util.mappers.EntityToItem
 import com.example.soroushplusproject.util.mappers.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class LocalDataSourceImpl @Inject constructor(
+class LocalDataSourceImpl(
     private val contactDao: ContactDao,
     private val entityToItem: EntityToItem,
     private val entityToDetails: EntityToDetails,

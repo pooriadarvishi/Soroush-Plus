@@ -2,9 +2,15 @@ package com.example.soroushplusproject.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.soroushplusproject.data.Repository
+import com.example.soroushplusproject.data.RepositoryImpl
 import com.example.soroushplusproject.data.contents.ContentObserver
 import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.data.local.ContactDataBase
+import com.example.soroushplusproject.data.local.LocalDataSource
+import com.example.soroushplusproject.data.local.LocalDataSourceImpl
+import com.example.soroushplusproject.util.mappers.EntityToDetails
+import com.example.soroushplusproject.util.mappers.EntityToItem
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +34,22 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideContactProvider(application: Application, contactDao: ContactDao): ContentObserver =
-        ContentObserver(application, contactDao)
+    fun provideLocalDataSource(
+        contactDao: ContactDao, entityToItem: EntityToItem, entityToDetails: EntityToDetails
+    ): LocalDataSource = LocalDataSourceImpl(contactDao, entityToItem, entityToDetails)
+
+
+    @Provides
+    @Singleton
+    fun provideContactProvider(
+        application: Application, localDataSource: LocalDataSource
+    ): ContentObserver = ContentObserver(application, localDataSource)
+
+
+    @Provides
+    @Singleton
+    fun provideRepository(
+        localDataSource: LocalDataSource,
+        contentObserver: ContentObserver
+    ): Repository = RepositoryImpl(localDataSource, contentObserver)
 }
