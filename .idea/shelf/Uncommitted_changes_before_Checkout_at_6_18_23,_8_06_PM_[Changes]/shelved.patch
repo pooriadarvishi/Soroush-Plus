@@ -1,0 +1,515 @@
+Index: app/src/main/java/com/example/soroushplusproject/ui/details/DetailsViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.ui.details\n\nimport androidx.lifecycle.LiveData\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.SavedStateHandle\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport com.example.soroushplusproject.data.Repository\nimport com.example.soroushplusproject.ui.models.ContactDetails\nimport com.example.soroushplusproject.util.CONTACT_ID\nimport dagger.hilt.android.lifecycle.HiltViewModel\nimport kotlinx.coroutines.Job\nimport kotlinx.coroutines.flow.collectLatest\nimport kotlinx.coroutines.launch\nimport javax.inject.Inject\n\n\n@HiltViewModel\nclass DetailsViewModel @Inject constructor(\n    private val repository: Repository, private val stateHandle: SavedStateHandle\n) : ViewModel() {\n\n    private val _contact = MutableLiveData<ContactDetails>()\n    val contact: LiveData<ContactDetails> = _contact\n\n    private val contactId = stateHandle.get<Int>(CONTACT_ID)\n\n    private var job: Job? = null\n\n    init {\n        contactId?.let { getContactById(it) }\n    }\n\n\n    private fun getContactById(contactId: Int) {\n        viewModelScope.launch {\n            repository.getContactById(contactId).collectLatest { contact ->\n                _contact.postValue(contact)\n            }\n        }\n    }\n\n    fun sync() {\n        job?.cancel()\n        job = viewModelScope.launch {\n            contactId?.let { repository.syncContact(it) }\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsViewModel.kt b/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsViewModel.kt
+--- a/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsViewModel.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsViewModel.kt	(date 1687104780164)
+@@ -9,7 +9,6 @@
+ import com.example.soroushplusproject.ui.models.ContactDetails
+ import com.example.soroushplusproject.util.CONTACT_ID
+ import dagger.hilt.android.lifecycle.HiltViewModel
+-import kotlinx.coroutines.Job
+ import kotlinx.coroutines.flow.collectLatest
+ import kotlinx.coroutines.launch
+ import javax.inject.Inject
+@@ -25,8 +24,6 @@
+ 
+     private val contactId = stateHandle.get<Int>(CONTACT_ID)
+ 
+-    private var job: Job? = null
+-
+     init {
+         contactId?.let { getContactById(it) }
+     }
+@@ -41,9 +38,8 @@
+     }
+ 
+     fun sync() {
+-        job?.cancel()
+-        job = viewModelScope.launch {
+-            contactId?.let { repository.syncContact(it) }
++        viewModelScope.launch {
++            repository.syncContacts()
+         }
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/soroushplusproject/ui/details/DetailsFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.ui.details\n\nimport android.Manifest\nimport android.os.Bundle\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport androidx.activity.result.contract.ActivityResultContracts\nimport androidx.fragment.app.Fragment\nimport androidx.fragment.app.viewModels\nimport com.example.soroushplusproject.databinding.FragmentDetailsBinding\nimport com.example.soroushplusproject.ui.models.ContactDetails\nimport com.example.soroushplusproject.ui.permission.showDialog\nimport com.example.soroushplusproject.util.isGrantedPermission\nimport com.example.soroushplusproject.util.loadImage\nimport dagger.hilt.android.AndroidEntryPoint\n\n\n@AndroidEntryPoint\nclass DetailsFragment : Fragment() {\n    private val permissionLauncher = registerForActivityResult(\n        ActivityResultContracts.RequestPermission()\n    ) {}\n\n    private lateinit var binding: FragmentDetailsBinding\n    private val detailsViewModel: DetailsViewModel by viewModels()\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?\n    ): View {\n        binding = FragmentDetailsBinding.inflate(inflater)\n        return binding.root\n    }\n\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\n        super.onViewCreated(view, savedInstanceState)\n        onObserve()\n    }\n\n    override fun onResume() {\n        super.onResume()\n        checkPermission()\n\n    }\n\n    private fun onBind(contactDetails: ContactDetails) {\n        binding.apply {\n            tvPhoneNumber.text = contactDetails.phoneNumber\n            tvEmail.text = contactDetails.email\n            tvNameContact.text = contactDetails.name\n            contactDetails.image?.let { igContactProfile.loadImage(it) }\n        }\n    }\n\n    private fun onObserve() {\n        detailsViewModel.contact.observe(viewLifecycleOwner) { contact ->\n            onBind(contact)\n        }\n    }\n\n    private fun checkPermission() {\n        if (!requireContext().isGrantedPermission()) getPermission()\n        else detailsViewModel.sync()\n    }\n\n    private fun getPermission() {\n        requireContext().showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsFragment.kt b/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsFragment.kt
+--- a/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsFragment.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/ui/details/DetailsFragment.kt	(date 1687105866239)
+@@ -1,16 +1,13 @@
+ package com.example.soroushplusproject.ui.details
+ 
+-import android.Manifest
+ import android.os.Bundle
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
+-import androidx.activity.result.contract.ActivityResultContracts
+ import androidx.fragment.app.Fragment
+ import androidx.fragment.app.viewModels
+ import com.example.soroushplusproject.databinding.FragmentDetailsBinding
+ import com.example.soroushplusproject.ui.models.ContactDetails
+-import com.example.soroushplusproject.ui.permission.showDialog
+ import com.example.soroushplusproject.util.isGrantedPermission
+ import com.example.soroushplusproject.util.loadImage
+ import dagger.hilt.android.AndroidEntryPoint
+@@ -18,9 +15,6 @@
+ 
+ @AndroidEntryPoint
+ class DetailsFragment : Fragment() {
+-    private val permissionLauncher = registerForActivityResult(
+-        ActivityResultContracts.RequestPermission()
+-    ) {}
+ 
+     private lateinit var binding: FragmentDetailsBinding
+     private val detailsViewModel: DetailsViewModel by viewModels()
+@@ -58,11 +52,11 @@
+     }
+ 
+     private fun checkPermission() {
+-        if (!requireContext().isGrantedPermission()) getPermission()
+-        else detailsViewModel.sync()
++        if (!requireContext().isGrantedPermission()) sync()
+     }
+ 
+-    private fun getPermission() {
+-        requireContext().showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }
++
++    private fun sync() {
++        detailsViewModel.sync()
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.ui.contact\n\nimport android.Manifest\nimport android.os.Bundle\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport androidx.activity.result.contract.ActivityResultContracts\nimport androidx.fragment.app.Fragment\nimport androidx.fragment.app.viewModels\nimport androidx.navigation.NavController\nimport androidx.navigation.fragment.findNavController\nimport androidx.recyclerview.widget.LinearLayoutManager\nimport com.example.soroushplusproject.databinding.FragmentContactBinding\nimport com.example.soroushplusproject.ui.contact.adapter.ContactAdapter\nimport com.example.soroushplusproject.ui.permission.showDialog\nimport com.example.soroushplusproject.util.isGrantedPermission\nimport dagger.hilt.android.AndroidEntryPoint\n\n\n@AndroidEntryPoint\nclass ContactFragment : Fragment() {\n    private val permissionLauncher = registerForActivityResult(\n        ActivityResultContracts.RequestPermission()\n    ) {}\n\n    private val contactViewModel: ContactViewModel by viewModels()\n    private lateinit var binding: FragmentContactBinding\n    private lateinit var adapter: ContactAdapter\n    private lateinit var navController: NavController\n\n\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?\n    ): View {\n        binding = FragmentContactBinding.inflate(inflater)\n        return binding.root\n    }\n\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\n        super.onViewCreated(view, savedInstanceState)\n        setUi()\n    }\n\n    override fun onResume() {\n        super.onResume()\n        checkPermission()\n    }\n\n\n    private fun checkPermission() {\n        if (!requireContext().isGrantedPermission()) getPermission()\n        else {\n            contactViewModel.connectToContent()\n            contactViewModel.sync()\n        }\n    }\n\n    private fun getPermission() {\n        requireContext().showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }\n    }\n\n\n    private fun setRecyclerView() {\n        navController = findNavController()\n        adapter = ContactAdapter { navigateToDetails(it) }\n        binding.apply {\n            rvContacts.adapter = adapter\n            rvContacts.layoutManager = LinearLayoutManager(requireContext())\n        }\n    }\n\n    private fun navigateToDetails(contactId: Int) {\n        navController.navigate(\n            ContactFragmentDirections.actionContactFragmentToDetailsFragment(\n                contactId\n            )\n        )\n    }\n\n    private fun onObserve() {\n        contactViewModel.contacts.observe(viewLifecycleOwner) { contacts ->\n            adapter.submitList(contacts)\n        }\n    }\n\n    private fun setUi() {\n        setRecyclerView()\n        onObserve()\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt b/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt
+--- a/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactFragment.kt	(date 1687105866255)
+@@ -1,11 +1,9 @@
+ package com.example.soroushplusproject.ui.contact
+ 
+-import android.Manifest
+ import android.os.Bundle
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
+-import androidx.activity.result.contract.ActivityResultContracts
+ import androidx.fragment.app.Fragment
+ import androidx.fragment.app.viewModels
+ import androidx.navigation.NavController
+@@ -13,16 +11,12 @@
+ import androidx.recyclerview.widget.LinearLayoutManager
+ import com.example.soroushplusproject.databinding.FragmentContactBinding
+ import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
+-import com.example.soroushplusproject.ui.permission.showDialog
+ import com.example.soroushplusproject.util.isGrantedPermission
+ import dagger.hilt.android.AndroidEntryPoint
+ 
+ 
+ @AndroidEntryPoint
+ class ContactFragment : Fragment() {
+-    private val permissionLauncher = registerForActivityResult(
+-        ActivityResultContracts.RequestPermission()
+-    ) {}
+ 
+     private val contactViewModel: ContactViewModel by viewModels()
+     private lateinit var binding: FragmentContactBinding
+@@ -47,17 +41,12 @@
+         checkPermission()
+     }
+ 
+-
+-    private fun checkPermission() {
+-        if (!requireContext().isGrantedPermission()) getPermission()
+-        else {
+-            contactViewModel.connectToContent()
+-            contactViewModel.sync()
+-        }
++    private fun sync() {
++        contactViewModel.sync()
+     }
+ 
+-    private fun getPermission() {
+-        requireContext().showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }
++    private fun checkPermission() {
++        if (requireContext().isGrantedPermission()) sync()
+     }
+ 
+ 
+Index: app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.data.contents\n\nimport android.annotation.SuppressLint\nimport android.content.ContentResolver\nimport android.content.Context\nimport android.provider.ContactsContract\nimport android.util.Log\nimport com.example.soroushplusproject.data.model.ContactEntity\n\nclass ContactProvider(private val context: Context) {\n\n    @SuppressLint(\"Range\")\n    fun getContacts(): List<ContactEntity> {\n        return setContactInfo()\n    }\n\n    private fun setContactInfo(): MutableList<ContactEntity> {\n        val contentResolver: ContentResolver = context.contentResolver\n\n        val contacts = mutableListOf<ContactEntity>()\n        contentResolver.query(\n            ContactsContract.Contacts.CONTENT_URI, null, null, null, null\n        )?.use { cursor ->\n            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)\n            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)\n            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)\n            while (cursor.moveToNext()) {\n                val contact = ContactEntity().apply {\n                    val sId = cursor.getString(contactIdIndex)\n\n                    name = cursor.getString(nameIndex)\n                    image = cursor.getString(photoIndex)\n\n                    setContactNumber(sId, this, contentResolver)\n\n                    setContactEmail(sId, this, contentResolver)\n\n                    id = sId.toInt()\n                }\n                contacts.add(contact)\n            }\n            cursor.close()\n        }\n        return contacts\n    }\n\n    private fun setContactNumber(\n        id: String, contact: ContactEntity, contentResolver: ContentResolver\n    ) {\n        contentResolver.query(\n            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,\n            null,\n            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + \" = ?\",\n            arrayOf(id),\n            null\n        )?.use { phoneCursor ->\n            val hasPhoneNumberIndex =\n                phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER)\n            val numberIndex =\n                phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)\n            while (phoneCursor.moveToNext()) {\n                if (phoneCursor.getInt(hasPhoneNumberIndex) > 0) {\n                    contact.phoneNumber = phoneCursor.getString(numberIndex)\n                }\n            }\n            phoneCursor.close()\n        }\n\n    }\n\n    private fun setContactEmail(\n        id: String, contact: ContactEntity, contentResolver: ContentResolver\n    ) {\n\n        contentResolver.query(\n            ContactsContract.CommonDataKinds.Email.CONTENT_URI,\n            null,\n            ContactsContract.CommonDataKinds.Email.CONTACT_ID + \" = ?\", arrayOf(id), null\n        )?.use { emailCursor ->\n            val emailIndex =\n                emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS)\n            while (emailCursor.moveToNext()) {\n                contact.email = emailCursor.getString(emailIndex)\n            }\n        }\n    }\n\n\n    fun getContactsById(id: String): ContactEntity {\n        val contentResolver: ContentResolver = context.contentResolver\n        val contact = ContactEntity()\n        contentResolver.query(\n            ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID+ \" = ?\", arrayOf(id), null\n        )?.use { cursor ->\n            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)\n            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)\n            cursor.moveToNext()\n            contact.apply {\n                this.id = id.toInt()\n                name = cursor.getString(nameIndex)\n                image = cursor.getString(photoIndex)\n\n                setContactNumber(id, this, contentResolver)\n\n                setContactEmail(id, this, contentResolver)\n            }\n            cursor.close()\n        }\n        return contact\n    }\n\n\n    fun getIdsContacts(): List<Int> {\n        val contentResolver: ContentResolver = context.contentResolver\n        val contactsIds = mutableListOf<Int>()\n        contentResolver.query(\n            ContactsContract.Contacts.CONTENT_URI, null, null, null, null\n        )?.use { cursor ->\n            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)\n            while (cursor.moveToNext()) {\n                contactsIds.add(cursor.getString(contactIdIndex).toInt())\n            }\n        }\n        return contactsIds\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt b/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt
+--- a/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt	(date 1687104780129)
+@@ -1,36 +1,71 @@
+ package com.example.soroushplusproject.data.contents
+ 
+-import android.annotation.SuppressLint
+ import android.content.ContentResolver
+ import android.content.Context
++import android.database.ContentObserver
+ import android.provider.ContactsContract
+-import android.util.Log
++import androidx.appcompat.app.AppCompatActivity
++import com.example.soroushplusproject.data.local.ContactDao
+ import com.example.soroushplusproject.data.model.ContactEntity
++import com.example.soroushplusproject.util.isGrantedPermission
++import kotlinx.coroutines.CoroutineScope
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.Job
++import kotlinx.coroutines.launch
++
++class ContactProvider(private val context: Context, private val contactDao: ContactDao) :
++    ContentObserver(null) {
++    companion object {
++        const val APP_PERF = "app_prefs"
++        const val LAST_UPDATE_TIME = "last_update_time"
++
++    }
+ 
+-class ContactProvider(private val context: Context) {
++    private var job = Job()
++    private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
+ 
+-    @SuppressLint("Range")
+-    fun getContacts(): List<ContactEntity> {
+-        return setContactInfo()
++
++    override fun onChange(selfChange: Boolean) {
++        super.onChange(selfChange)
++        job.cancel()
++        if (context.isGrantedPermission()) coroutineScope.launch { syncContacts() }
+     }
+ 
+-    private fun setContactInfo(): MutableList<ContactEntity> {
++    suspend fun syncContacts() {
++        contactDao.insertContacts(newContacts())
++        deletedContacts().forEach { contactDao.deleteContactById(it) }
++    }
++
++
++    private fun newContacts(): MutableList<ContactEntity> {
+         val contentResolver: ContentResolver = context.contentResolver
+-
+         val contacts = mutableListOf<ContactEntity>()
++        var lastUpdateTime = getLastUpdateTime()
++
++
+         contentResolver.query(
+-            ContactsContract.Contacts.CONTENT_URI, null, null, null, null
++            ContactsContract.Contacts.CONTENT_URI,
++            null,
++            "${ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP} > ?",
++            arrayOf(lastUpdateTime.toString()),
++            null,
++            null
+         )?.use { cursor ->
+             val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)
+             val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+             val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
++            val updateIndex =
++                cursor.getColumnIndex(ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP)
+             while (cursor.moveToNext()) {
+                 val contact = ContactEntity().apply {
+                     val sId = cursor.getString(contactIdIndex)
++                    val updateTime = cursor.getLong(updateIndex)
++                    if (updateTime > lastUpdateTime) lastUpdateTime = updateTime
+ 
+                     name = cursor.getString(nameIndex)
+                     image = cursor.getString(photoIndex)
+ 
++
+                     setContactNumber(sId, this, contentResolver)
+ 
+                     setContactEmail(sId, this, contentResolver)
+@@ -41,6 +76,7 @@
+             }
+             cursor.close()
+         }
++        setLastUpdateTime(lastUpdateTime)
+         return contacts
+     }
+ 
+@@ -86,41 +122,47 @@
+     }
+ 
+ 
+-    fun getContactsById(id: String): ContactEntity {
+-        val contentResolver: ContentResolver = context.contentResolver
+-        val contact = ContactEntity()
+-        contentResolver.query(
+-            ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID+ " = ?", arrayOf(id), null
+-        )?.use { cursor ->
+-            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+-            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+-            cursor.moveToNext()
+-            contact.apply {
+-                this.id = id.toInt()
+-                name = cursor.getString(nameIndex)
+-                image = cursor.getString(photoIndex)
+-
+-                setContactNumber(id, this, contentResolver)
++    private fun deletedContacts(): MutableList<Int> {
++        var lastUpdateTime = getLastUpdateTime()
++        val deletedContactIds = mutableListOf<Int>()
++        val cursor = context.contentResolver.query(
++            ContactsContract.DeletedContacts.CONTENT_URI,
++            null,
++            "${ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP} > ?",
++            arrayOf(lastUpdateTime.toString()),
++            null
++        )
++        cursor?.use { cursor ->
+ 
+-                setContactEmail(id, this, contentResolver)
+-            }
+-            cursor.close()
+-        }
+-        return contact
+-    }
+-
+-
+-    fun getIdsContacts(): List<Int> {
+-        val contentResolver: ContentResolver = context.contentResolver
+-        val contactsIds = mutableListOf<Int>()
+-        contentResolver.query(
+-            ContactsContract.Contacts.CONTENT_URI, null, null, null, null
+-        )?.use { cursor ->
+-            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)
++            val contactIdIndex = cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
++            val updateIndex =
++                cursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_DELETED_TIMESTAMP)
+             while (cursor.moveToNext()) {
+-                contactsIds.add(cursor.getString(contactIdIndex).toInt())
++
++                deletedContactIds.add(cursor.getLong(contactIdIndex).toInt())
++                val updateTime = cursor.getLong(updateIndex)
++                if (updateTime > lastUpdateTime) lastUpdateTime = updateTime
+             }
++            setLastUpdateTime(lastUpdateTime)
+         }
+-        return contactsIds
++        return deletedContactIds
+     }
++
++
++    private fun getLastUpdateTime(): Long {
++        val sharedPreferences =
++            context.getSharedPreferences(APP_PERF, AppCompatActivity.MODE_PRIVATE)
++        return sharedPreferences.getLong(LAST_UPDATE_TIME, 0)
++    }
++
++    private fun setLastUpdateTime(lastUpdateTime: Long) {
++        val sharedPreferences =
++            context.getSharedPreferences(APP_PERF, AppCompatActivity.MODE_PRIVATE)
++        with(sharedPreferences.edit()) {
++            putLong(LAST_UPDATE_TIME, lastUpdateTime)
++            apply()
++        }
++    }
++
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/soroushplusproject/data/Repository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.data\n\nimport com.example.soroushplusproject.data.contents.ContactProvider\nimport com.example.soroushplusproject.data.local.ContactDao\nimport com.example.soroushplusproject.ui.models.ContactDetails\nimport com.example.soroushplusproject.ui.models.ContactItem\nimport com.example.soroushplusproject.util.mappers.EntityToDetails\nimport com.example.soroushplusproject.util.mappers.EntityToItem\nimport com.example.soroushplusproject.util.mappers.map\nimport kotlinx.coroutines.flow.Flow\nimport kotlinx.coroutines.flow.map\nimport javax.inject.Inject\n\nclass Repository @Inject constructor(\n    private val contactDao: ContactDao,\n    private val contactProvider: ContactProvider,\n    private val entityToItem: EntityToItem,\n    private val entityToDetails: EntityToDetails,\n) {\n    suspend fun insertAllContact() {\n        if (contactDao.getAllIdContacts().isEmpty()) {\n            contactDao.insertContacts(contactProvider.getContacts())\n        }\n    }\n\n\n    suspend fun syncContacts() {\n        val contacts = contactProvider.getContacts()\n        contactDao.insertContacts(contacts)\n        syncDeletedContacts()\n    }\n\n\n    private suspend fun syncDeletedContacts() {\n        val localContacts = contactDao.getAllIdContacts()\n        val mobileContacts = contactProvider.getIdsContacts()\n        val deletedContacts = localContacts.filter { it !in mobileContacts }\n        deletedContacts.forEach { contactDao.deleteContactById(it) }\n    }\n\n    suspend fun syncContact(contactId: Int) {\n        contactDao.updateContact(contactProvider.getContactsById(contactId.toString()))\n    }\n\n\n    fun getAllContact(): Flow<List<ContactItem>> =\n        contactDao.getAllContacts().map { entityToItem.map(it) }\n\n    fun getContactById(id: Int): Flow<ContactDetails> =\n        contactDao.getContactById(id).map { entityToDetails.map(it) }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/data/Repository.kt b/app/src/main/java/com/example/soroushplusproject/data/Repository.kt
+--- a/app/src/main/java/com/example/soroushplusproject/data/Repository.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/data/Repository.kt	(date 1687104780170)
+@@ -17,29 +17,10 @@
+     private val entityToItem: EntityToItem,
+     private val entityToDetails: EntityToDetails,
+ ) {
+-    suspend fun insertAllContact() {
+-        if (contactDao.getAllIdContacts().isEmpty()) {
+-            contactDao.insertContacts(contactProvider.getContacts())
+-        }
+-    }
+ 
+ 
+     suspend fun syncContacts() {
+-        val contacts = contactProvider.getContacts()
+-        contactDao.insertContacts(contacts)
+-        syncDeletedContacts()
+-    }
+-
+-
+-    private suspend fun syncDeletedContacts() {
+-        val localContacts = contactDao.getAllIdContacts()
+-        val mobileContacts = contactProvider.getIdsContacts()
+-        val deletedContacts = localContacts.filter { it !in mobileContacts }
+-        deletedContacts.forEach { contactDao.deleteContactById(it) }
+-    }
+-
+-    suspend fun syncContact(contactId: Int) {
+-        contactDao.updateContact(contactProvider.getContactsById(contactId.toString()))
++        contactProvider.syncContacts()
+     }
+ 
+ 
+Index: app/src/main/java/com/example/soroushplusproject/ui/contact/ContactViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.ui.contact\n\nimport androidx.activity.result.contract.ActivityResultContracts\nimport androidx.lifecycle.LiveData\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport com.example.soroushplusproject.data.Repository\nimport com.example.soroushplusproject.ui.models.ContactItem\nimport com.example.soroushplusproject.ui.permission.showDialog\nimport dagger.hilt.android.lifecycle.HiltViewModel\nimport kotlinx.coroutines.Job\nimport kotlinx.coroutines.flow.collectLatest\nimport kotlinx.coroutines.launch\nimport javax.inject.Inject\n\n\n@HiltViewModel\nclass ContactViewModel @Inject constructor(private val repository: Repository) : ViewModel() {\n    private val _contacts = MutableLiveData<List<ContactItem>>()\n    val contacts: LiveData<List<ContactItem>> = _contacts\n    private var job: Job? = null\n\n\n    init {\n        getContacts()\n    }\n\n    private fun getContacts() {\n        viewModelScope.launch {\n            repository.getAllContact().collectLatest {\n                _contacts.postValue(it)\n            }\n        }\n    }\n\n    private fun insertContact() {\n        job?.cancel()\n        job = viewModelScope.launch {\n            repository.insertAllContact()\n        }\n    }\n\n    fun connectToContent() {\n        insertContact()\n    }\n\n    fun sync() {\n        job?.cancel()\n        job = viewModelScope.launch {\n            repository.syncContacts()\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactViewModel.kt b/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactViewModel.kt
+--- a/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactViewModel.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/ui/contact/ContactViewModel.kt	(date 1687104780147)
+@@ -1,15 +1,12 @@
+ package com.example.soroushplusproject.ui.contact
+ 
+-import androidx.activity.result.contract.ActivityResultContracts
+ import androidx.lifecycle.LiveData
+ import androidx.lifecycle.MutableLiveData
+ import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.viewModelScope
+ import com.example.soroushplusproject.data.Repository
+ import com.example.soroushplusproject.ui.models.ContactItem
+-import com.example.soroushplusproject.ui.permission.showDialog
+ import dagger.hilt.android.lifecycle.HiltViewModel
+-import kotlinx.coroutines.Job
+ import kotlinx.coroutines.flow.collectLatest
+ import kotlinx.coroutines.launch
+ import javax.inject.Inject
+@@ -19,7 +16,6 @@
+ class ContactViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+     private val _contacts = MutableLiveData<List<ContactItem>>()
+     val contacts: LiveData<List<ContactItem>> = _contacts
+-    private var job: Job? = null
+ 
+ 
+     init {
+@@ -34,20 +30,8 @@
+         }
+     }
+ 
+-    private fun insertContact() {
+-        job?.cancel()
+-        job = viewModelScope.launch {
+-            repository.insertAllContact()
+-        }
+-    }
+-
+-    fun connectToContent() {
+-        insertContact()
+-    }
+-
+     fun sync() {
+-        job?.cancel()
+-        job = viewModelScope.launch {
++        viewModelScope.launch {
+             repository.syncContacts()
+         }
+     }
+Index: app/src/main/java/com/example/soroushplusproject/ui/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.ui\n\nimport androidx.appcompat.app.AppCompatActivity\nimport android.os.Bundle\nimport com.example.soroushplusproject.R\nimport dagger.hilt.android.AndroidEntryPoint\n\n@AndroidEntryPoint\nclass MainActivity : AppCompatActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_main)\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/MainActivity.kt b/app/src/main/java/com/example/soroushplusproject/ui/MainActivity.kt
+--- a/app/src/main/java/com/example/soroushplusproject/ui/MainActivity.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/ui/MainActivity.kt	(date 1687106056045)
+@@ -1,14 +1,50 @@
+ package com.example.soroushplusproject.ui
+ 
+-import androidx.appcompat.app.AppCompatActivity
++import android.Manifest
+ import android.os.Bundle
++import android.provider.ContactsContract
++import androidx.activity.result.contract.ActivityResultContracts
++import androidx.appcompat.app.AppCompatActivity
+ import com.example.soroushplusproject.R
++import com.example.soroushplusproject.data.contents.ContactProvider
++import com.example.soroushplusproject.ui.permission.showDialog
++import com.example.soroushplusproject.util.isGrantedPermission
+ import dagger.hilt.android.AndroidEntryPoint
++import javax.inject.Inject
+ 
+ @AndroidEntryPoint
+ class MainActivity : AppCompatActivity() {
++
++    private val permissionLauncher = registerForActivityResult(
++        ActivityResultContracts.RequestPermission()
++    ) { if (it) observeContacts() }
++
++
++    @Inject
++    lateinit var contactProvider: ContactProvider
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_main)
++        checkPermission()
++    }
++
++
++    private fun showDialogs() {
++        this.showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }
++    }
++
++
++    private fun checkPermission() {
++        if (this.isGrantedPermission()) observeContacts()
++        else showDialogs()
++    }
++
++    private fun observeContacts() {
++        val resolver = contentResolver
++        resolver.registerContentObserver(
++            ContactsContract.DeletedContacts.CONTENT_URI,
++            true,
++            contactProvider
++        )
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/soroushplusproject/di/AppModule.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.di\n\nimport android.app.Application\nimport androidx.room.Room\nimport com.example.soroushplusproject.data.contents.ContactProvider\nimport com.example.soroushplusproject.data.local.ContactDao\nimport com.example.soroushplusproject.data.local.ContactDataBase\nimport dagger.Module\nimport dagger.Provides\nimport dagger.hilt.InstallIn\nimport dagger.hilt.components.SingletonComponent\nimport javax.inject.Singleton\n\n\n@Module\n@InstallIn(SingletonComponent::class)\nobject AppModule {\n\n    @Provides\n    @Singleton\n    fun provideDataBase(application: Application): ContactDataBase =\n        Room.databaseBuilder(application, ContactDataBase::class.java, \"contact_database\").build()\n\n    @Provides\n    @Singleton\n    fun provideDao(contactDataBase: ContactDataBase): ContactDao = contactDataBase.contactDao()\n\n\n    @Provides\n    @Singleton\n    fun provideContactProvider(application: Application): ContactProvider =\n        ContactProvider(application)\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/di/AppModule.kt b/app/src/main/java/com/example/soroushplusproject/di/AppModule.kt
+--- a/app/src/main/java/com/example/soroushplusproject/di/AppModule.kt	(revision c1ab8851a22430f8efed72d3833dffb2db9fbbac)
++++ b/app/src/main/java/com/example/soroushplusproject/di/AppModule.kt	(date 1687104780159)
+@@ -28,6 +28,6 @@
+ 
+     @Provides
+     @Singleton
+-    fun provideContactProvider(application: Application): ContactProvider =
+-        ContactProvider(application)
++    fun provideContactProvider(application: Application, contactDao: ContactDao): ContactProvider =
++        ContactProvider(application, contactDao)
+ }
+\ No newline at end of file
