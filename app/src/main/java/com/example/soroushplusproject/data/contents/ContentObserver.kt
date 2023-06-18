@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.ContentObserver
 import android.provider.ContactsContract
 import androidx.appcompat.app.AppCompatActivity
-import com.example.soroushplusproject.data.local.ContactDao
+import com.example.soroushplusproject.data.local.LocalDataSource
 import com.example.soroushplusproject.data.model.ContactEntity
 import com.example.soroushplusproject.util.isGrantedPermission
 import kotlinx.coroutines.CoroutineScope
@@ -13,8 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class ContentObserver(private val context: Context, private val contactDao: ContactDao) :
-    ContentObserver(null) {
+class ContentObserver(
+    private val context: Context, private val localDataSource: LocalDataSource
+) : ContentObserver(null) {
     companion object {
         const val APP_PERF = "app_prefs"
         const val LAST_UPDATE_TIME = "last_update_time"
@@ -32,8 +33,8 @@ class ContentObserver(private val context: Context, private val contactDao: Cont
     }
 
     suspend fun syncContacts() {
-        contactDao.insertContacts(newContacts())
-        deletedContacts().forEach { contactDao.deleteContactById(it) }
+        localDataSource.insertContacts(newContacts())
+        deletedContacts().forEach { localDataSource.deleteContactById(it) }
     }
 
 
