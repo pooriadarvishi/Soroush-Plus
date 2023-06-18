@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/contact_nav">
+    android:id="@+id/contact_nav"
+    app:startDestination="@id/contactFragment">
     <fragment
         android:id="@+id/contactFragment"
         android:name="com.example.soroushplusproject.ui.contact.ContactFragment"

@@ -1,23 +1,28 @@
 package com.example.soroushplusproject.ui.contact
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentContactBinding
 import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
+import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.isGrantedPermission
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class ContactFragment : Fragment() {
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {}
 
     private val contactViewModel: ContactViewModel by viewModels()
     private lateinit var binding: FragmentContactBinding
@@ -44,12 +49,15 @@ class ContactFragment : Fragment() {
 
 
     private fun checkPermission() {
-        if (!requireContext().isGrantedPermission()) navigateToPermission()
-        else contactViewModel.sync()
+        if (!requireContext().isGrantedPermission()) getPermission()
+        else {
+            contactViewModel.connectToContent()
+            contactViewModel.sync()
+        }
     }
 
-    private fun navigateToPermission() {
-        navController.navigate(R.id.action_contactFragment_to_permissionFragment)
+    private fun getPermission() {
+        requireContext().showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }
     }
 
 

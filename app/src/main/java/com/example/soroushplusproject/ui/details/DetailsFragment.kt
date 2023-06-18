@@ -1,15 +1,16 @@
 package com.example.soroushplusproject.ui.details
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
 import com.example.soroushplusproject.ui.models.ContactDetails
+import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.isGrantedPermission
 import com.example.soroushplusproject.util.loadImage
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {}
 
     private lateinit var binding: FragmentDetailsBinding
     private val detailsViewModel: DetailsViewModel by viewModels()
@@ -54,11 +58,11 @@ class DetailsFragment : Fragment() {
     }
 
     private fun checkPermission() {
-        if (!requireContext().isGrantedPermission()) navigateToPermission()
+        if (!requireContext().isGrantedPermission()) getPermission()
         else detailsViewModel.sync()
     }
 
-    private fun navigateToPermission() {
-        findNavController().navigate(R.id.action_detailsFragment_to_permissionFragment)
+    private fun getPermission() {
+        requireContext().showDialog { permissionLauncher.launch(Manifest.permission.READ_CONTACTS) }
     }
 }
