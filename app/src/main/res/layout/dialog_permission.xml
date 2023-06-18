@@ -22,7 +22,6 @@
             android:padding="@dimen/_24dp">
 
             <ImageView
-                android:id="@+id/ig_contactProfile"
                 android:layout_width="@dimen/_70dp"
                 android:layout_height="@dimen/_70dp"
                 android:layout_marginTop="@dimen/_24dp"
