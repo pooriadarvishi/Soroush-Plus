@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.soroushplusproject.data.Repository
 import com.example.soroushplusproject.ui.models.ContactDetails
-import com.example.soroushplusproject.util.CONTACT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,7 +21,7 @@ class DetailsViewModel @Inject constructor(
     private val _contact = MutableLiveData<ContactDetails>()
     val contact: LiveData<ContactDetails> = _contact
 
-    private val contactId = stateHandle.get<Int>(CONTACT_ID)
+    private val contactId = stateHandle.get<Int>(DetailsFragment.CONTACT_ID)
 
     init {
         contactId?.let { getContactById(it) }

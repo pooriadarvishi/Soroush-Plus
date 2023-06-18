@@ -15,6 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
+    companion object{
+        const val CONTACT_ID = "contact_id"
+    }
+
 
     private lateinit var binding: FragmentDetailsBinding
     private val detailsViewModel: DetailsViewModel by viewModels()
