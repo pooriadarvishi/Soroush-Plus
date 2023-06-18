@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.util.isGrantedPermission
@@ -54,11 +52,11 @@ class DetailsFragment : Fragment() {
     }
 
     private fun checkPermission() {
-        if (!requireContext().isGrantedPermission()) navigateToPermission()
-        else detailsViewModel.sync()
+        if (!requireContext().isGrantedPermission()) sync()
     }
 
-    private fun navigateToPermission() {
-        findNavController().navigate(R.id.action_detailsFragment_to_permissionFragment)
+
+    private fun sync() {
+        detailsViewModel.sync()
     }
 }
