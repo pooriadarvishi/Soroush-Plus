@@ -1,0 +1,240 @@
+Index: app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionFragment.kt
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionFragment.kt b/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionFragment.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionFragment.kt	(revision c0ee044833ee3b4f4da806039800a6b28432e20b)
++++ /dev/null	(revision c0ee044833ee3b4f4da806039800a6b28432e20b)
+@@ -1,107 +0,0 @@
+-package com.example.soroushplusproject.ui.permission
+-
+-import android.Manifest
+-import android.app.AlertDialog
+-import android.content.Intent
+-import android.net.Uri
+-import android.os.Bundle
+-import android.provider.Settings
+-import android.view.LayoutInflater
+-import android.view.View
+-import android.view.ViewGroup
+-import androidx.activity.result.contract.ActivityResultContracts
+-import androidx.fragment.app.Fragment
+-import androidx.fragment.app.viewModels
+-import androidx.navigation.fragment.findNavController
+-import com.example.soroushplusproject.R
+-import com.example.soroushplusproject.databinding.FragmentPermissionBinding
+-import com.example.soroushplusproject.util.isGrantedPermission
+-
+-class PermissionFragment : Fragment() {
+-
+-    private lateinit var binding: FragmentPermissionBinding
+-    private val permissionViewModel: PermissionViewModel by viewModels()
+-    private val permissionLauncher = registerForActivityResult(
+-        ActivityResultContracts.RequestPermission()
+-    ) { isGranted: Boolean ->
+-        if (isGranted) {
+-            permissionViewModel.onPermissionGranted()
+-        } else {
+-            permissionViewModel.onPermissionDenied()
+-        }
+-    }
+-
+-
+-    override fun onCreateView(
+-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+-    ): View {
+-        binding = FragmentPermissionBinding.inflate(inflater)
+-        return binding.root
+-    }
+-
+-    override fun onResume() {
+-        super.onResume()
+-        checkPermission()
+-    }
+-
+-
+-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+-        super.onViewCreated(view, savedInstanceState)
+-        setUi()
+-    }
+-
+-    private fun setUi() {
+-        observePermission()
+-        onSetClickBtnGetContact()
+-    }
+-
+-
+-    private fun observePermission() {
+-        permissionViewModel.permissionState.observe(viewLifecycleOwner) { isGranted ->
+-            if (isGranted) onNavigateToContact()
+-        }
+-    }
+-
+-    private fun onNavigateToContact() {
+-        findNavController().navigate(R.id.action_permissionFragment_to_contactFragment)
+-    }
+-
+-
+-    private fun checkPermission() {
+-        if (requireContext().isGrantedPermission()) permissionViewModel.onPermissionGranted()
+-    }
+-
+-
+-    private fun onSetClickBtnGetContact() {
+-        binding.btnGetContact.setOnClickListener {
+-            if (permissionViewModel.showPermissionState()) {
+-
+-                permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+-            } else {
+-                onShowPermissionDeniedDialog()
+-            }
+-        }
+-    }
+-
+-
+-    private fun onShowPermissionDeniedDialog() {
+-        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+-        alertDialogBuilder.setMessage(getString(R.string.access_of_setting)).setCancelable(false)
+-            .setPositiveButton(getString(R.string.setting)) { _, _ ->
+-                setIntentSetting()
+-            }.setNegativeButton(getString(R.string.never_mind)) { dialog, _ ->
+-                dialog.cancel()
+-            }
+-        val alert = alertDialogBuilder.create()
+-        alert.show()
+-    }
+-
+-    private fun setIntentSetting() {
+-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+-        val uri = Uri.fromParts("package", requireActivity().packageName, null)
+-        intent.data = uri
+-        startActivity(intent)
+-    }
+-}
+-
+-
+Index: app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionViewModel.kt
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionViewModel.kt b/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionViewModel.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionViewModel.kt	(revision c0ee044833ee3b4f4da806039800a6b28432e20b)
++++ /dev/null	(revision c0ee044833ee3b4f4da806039800a6b28432e20b)
+@@ -1,24 +0,0 @@
+-package com.example.soroushplusproject.ui.permission
+-
+-import androidx.lifecycle.LiveData
+-import androidx.lifecycle.MutableLiveData
+-import androidx.lifecycle.ViewModel
+-
+-class PermissionViewModel : ViewModel() {
+-    private val _permissionState = MutableLiveData(false)
+-    val permissionState: LiveData<Boolean> = _permissionState
+-
+-    private var showPermissionRequestState = true
+-
+-    fun showPermissionState() = showPermissionRequestState
+-
+-    fun onPermissionDenied() {
+-        _permissionState.postValue(false)
+-        showPermissionRequestState = false
+-    }
+-
+-    fun onPermissionGranted() {
+-        _permissionState.postValue(true)
+-        showPermissionRequestState = true
+-    }
+-}
+\ No newline at end of file
+Index: app/src/main/res/layout/dialog_permission.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<layout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\">\n\n    <data>\n\n    </data>\n\n    <com.google.android.material.card.MaterialCardView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_margin=\"@dimen/_10dp\"\n        app:cardCornerRadius=\"@dimen/_20dp\"\n        app:cardElevation=\"@dimen/_10dp\">\n\n\n        <LinearLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:gravity=\"center\"\n            android:orientation=\"vertical\"\n            android:padding=\"@dimen/_10dp\">\n\n            <ImageView\n                android:id=\"@+id/ig_contactProfile\"\n                android:layout_width=\"@dimen/_70dp\"\n                android:layout_height=\"@dimen/_70dp\"\n                android:layout_margin=\"@dimen/_10dp\"\n                android:src=\"@drawable/contacts\" />\n\n            <TextView\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginTop=\"@dimen/_10dp\"\n                android:text=\"@string/Permission_granted\"\n                android:textSize=\"@dimen/_30sp\"\n                android:textStyle=\"bold\" />\n\n            <TextView\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginTop=\"@dimen/_10dp\"\n                android:gravity=\"center\"\n                android:text=\"@string/permission_request\"\n                android:textSize=\"@dimen/_20sp\" />\n\n\n            <LinearLayout\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:orientation=\"horizontal\">\n\n\n                <Button\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:layout_margin=\"@dimen/_20dp\"\n                    android:gravity=\"center\"\n                    android:text=\"@string/never_mind\"\n                    android:textSize=\"@dimen/_15sp\"\n                    android:textStyle=\"bold\"\n                    android:textColor=\"@color/button\"\n                    android:background=\"null\"/>\n\n                <Button\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:layout_margin=\"@dimen/_20dp\"\n                    android:text=\"@string/continue_permission\"\n                    android:textSize=\"@dimen/_15sp\"\n                    android:textStyle=\"bold\" />\n\n\n            </LinearLayout>\n\n\n        </LinearLayout>\n\n    </com.google.android.material.card.MaterialCardView>\n</layout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/dialog_permission.xml b/app/src/main/res/layout/dialog_permission.xml
+--- a/app/src/main/res/layout/dialog_permission.xml	(revision c0ee044833ee3b4f4da806039800a6b28432e20b)
++++ b/app/src/main/res/layout/dialog_permission.xml	(date 1687084909438)
+@@ -9,7 +9,7 @@
+     <com.google.android.material.card.MaterialCardView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:layout_margin="@dimen/_10dp"
++        android:layout_margin="24dp"
+         app:cardCornerRadius="@dimen/_20dp"
+         app:cardElevation="@dimen/_10dp">
+ 
+@@ -31,7 +31,7 @@
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+-                android:layout_marginTop="@dimen/_10dp"
++                android:layout_marginTop="12dp"
+                 android:text="@string/Permission_granted"
+                 android:textSize="@dimen/_30sp"
+                 android:textStyle="bold" />
+@@ -39,7 +39,7 @@
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+-                android:layout_marginTop="@dimen/_10dp"
++                android:layout_marginTop="12dp"
+                 android:gravity="center"
+                 android:text="@string/permission_request"
+                 android:textSize="@dimen/_20sp" />
+@@ -48,7 +48,8 @@
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+-                android:orientation="horizontal">
++                android:orientation="horizontal"
++                android:layout_marginTop="12dp">
+ 
+ 
+                 <Button
+Index: app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionDialog.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionDialog.kt b/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionDialog.kt
+new file mode 100644
+--- /dev/null	(date 1687077341767)
++++ b/app/src/main/java/com/example/soroushplusproject/ui/permission/PermissionDialog.kt	(date 1687077341767)
+@@ -0,0 +1,7 @@
++package com.example.soroushplusproject.ui.permission
++
++import androidx.fragment.app.DialogFragment
++
++class PermissionDialog : DialogFragment() {
++
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/soroushplusproject/data/local/ContactDao.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.data.local\n\nimport androidx.room.Dao\nimport androidx.room.Insert\nimport androidx.room.OnConflictStrategy\nimport androidx.room.Query\nimport androidx.room.Update\nimport com.example.soroushplusproject.data.model.ContactEntity\nimport kotlinx.coroutines.flow.Flow\n\n@Dao\ninterface ContactDao {\n    @Insert(onConflict = OnConflictStrategy.REPLACE)\n    suspend fun insertContacts(Contacts: List<ContactEntity>)\n\n    @Query(\"SELECT * FROM contact_table ORDER BY name ASC\")\n    fun getAllContacts(): Flow<List<ContactEntity>>\n\n    @Query(\"SELECT * FROM contact_table WHERE id = :id\")\n    fun getContactById(id: Int): Flow<ContactEntity>\n\n    @Query(\"SELECT id FROM contact_table\")\n    suspend fun getAllIdContacts(): List<Int>\n\n    @Query(\"DELETE FROM contact_table WHERE id = :id\")\n    suspend fun deleteContactById(id: Int)\n\n    @Update\n    suspend fun updateContact(contact: ContactEntity)\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/data/local/ContactDao.kt b/app/src/main/java/com/example/soroushplusproject/data/local/ContactDao.kt
+--- a/app/src/main/java/com/example/soroushplusproject/data/local/ContactDao.kt	(revision c0ee044833ee3b4f4da806039800a6b28432e20b)
++++ b/app/src/main/java/com/example/soroushplusproject/data/local/ContactDao.kt	(date 1687080028921)
+@@ -1,16 +1,16 @@
+ package com.example.soroushplusproject.data.local
+ 
+ import androidx.room.Dao
+-import androidx.room.Insert
+ import androidx.room.OnConflictStrategy
+ import androidx.room.Query
+ import androidx.room.Update
++import androidx.room.Upsert
+ import com.example.soroushplusproject.data.model.ContactEntity
+ import kotlinx.coroutines.flow.Flow
+ 
+ @Dao
+ interface ContactDao {
+-    @Insert(onConflict = OnConflictStrategy.REPLACE)
++    @Upsert
+     suspend fun insertContacts(Contacts: List<ContactEntity>)
+ 
+     @Query("SELECT * FROM contact_table ORDER BY name ASC")

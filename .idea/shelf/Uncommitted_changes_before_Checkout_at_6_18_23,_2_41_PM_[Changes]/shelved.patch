@@ -1,0 +1,70 @@
+Index: app/src/main/res/navigation/contact_nav.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<navigation xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:id=\"@+id/contact_nav\"\n    app:startDestination=\"@id/permissionFragment\">\n    <fragment\n        android:id=\"@+id/permissionFragment\"\n        android:name=\"com.example.soroushplusproject.ui.permission.PermissionFragment\"\n        android:label=\"PermissionFragment\" >\n        <action\n            android:id=\"@+id/action_permissionFragment_to_contactFragment\"\n            app:destination=\"@id/contactFragment\"\n            app:popUpTo=\"@id/permissionFragment\"\n            app:popUpToInclusive=\"true\"/>\n    </fragment>\n    <fragment\n        android:id=\"@+id/contactFragment\"\n        android:name=\"com.example.soroushplusproject.ui.contact.ContactFragment\"\n        android:label=\"ContactFragment\">\n        <action\n            android:id=\"@+id/action_contactFragment_to_permissionFragment\"\n            app:destination=\"@id/permissionFragment\"\n            app:popUpTo=\"@id/contactFragment\"\n            app:popUpToInclusive=\"true\" />\n        <action\n            android:id=\"@+id/action_contactFragment_to_detailsFragment\"\n            app:destination=\"@id/detailsFragment\" />\n    </fragment>\n    <fragment\n        android:id=\"@+id/detailsFragment\"\n        android:name=\"com.example.soroushplusproject.ui.details.DetailsFragment\"\n        android:label=\"DetailsFragment\">\n        <action\n            android:id=\"@+id/action_detailsFragment_to_permissionFragment\"\n            app:destination=\"@id/permissionFragment\"\n            app:popUpTo=\"@id/contactFragment\"\n            app:popUpToInclusive=\"true\" />\n        <argument\n            android:name=\"contact_id\"\n            app:argType=\"integer\" />\n    </fragment>\n</navigation>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/navigation/contact_nav.xml b/app/src/main/res/navigation/contact_nav.xml
+--- a/app/src/main/res/navigation/contact_nav.xml	(revision e72253f9000b0aa603d7ff4e6629ae4ef8101538)
++++ b/app/src/main/res/navigation/contact_nav.xml	(date 1687085840157)
+@@ -1,27 +1,12 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <navigation xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+-    android:id="@+id/contact_nav"
+-    app:startDestination="@id/permissionFragment">
+-    <fragment
+-        android:id="@+id/permissionFragment"
+-        android:name="com.example.soroushplusproject.ui.permission.PermissionFragment"
+-        android:label="PermissionFragment" >
+-        <action
+-            android:id="@+id/action_permissionFragment_to_contactFragment"
+-            app:destination="@id/contactFragment"
+-            app:popUpTo="@id/permissionFragment"
+-            app:popUpToInclusive="true"/>
+-    </fragment>
++    android:id="@+id/contact_nav">
+     <fragment
+         android:id="@+id/contactFragment"
+         android:name="com.example.soroushplusproject.ui.contact.ContactFragment"
+         android:label="ContactFragment">
+-        <action
+-            android:id="@+id/action_contactFragment_to_permissionFragment"
+-            app:destination="@id/permissionFragment"
+-            app:popUpTo="@id/contactFragment"
+-            app:popUpToInclusive="true" />
++
+         <action
+             android:id="@+id/action_contactFragment_to_detailsFragment"
+             app:destination="@id/detailsFragment" />
+@@ -30,11 +15,6 @@
+         android:id="@+id/detailsFragment"
+         android:name="com.example.soroushplusproject.ui.details.DetailsFragment"
+         android:label="DetailsFragment">
+-        <action
+-            android:id="@+id/action_detailsFragment_to_permissionFragment"
+-            app:destination="@id/permissionFragment"
+-            app:popUpTo="@id/contactFragment"
+-            app:popUpToInclusive="true" />
+         <argument
+             android:name="contact_id"
+             app:argType="integer" />
+Index: app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.soroushplusproject.data.contents\n\nimport android.annotation.SuppressLint\nimport android.content.ContentResolver\nimport android.content.Context\nimport android.provider.ContactsContract\nimport android.util.Log\nimport com.example.soroushplusproject.data.model.ContactEntity\n\nclass ContactProvider(private val context: Context) {\n\n    @SuppressLint(\"Range\")\n    fun getContacts(): List<ContactEntity> {\n        return setContactInfo()\n    }\n\n    private fun setContactInfo(): MutableList<ContactEntity> {\n        val contentResolver: ContentResolver = context.contentResolver\n\n        val contacts = mutableListOf<ContactEntity>()\n        contentResolver.query(\n            ContactsContract.Contacts.CONTENT_URI, null, null, null, null\n        )?.use { cursor ->\n            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)\n            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)\n            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)\n            while (cursor.moveToNext()) {\n                val contact = ContactEntity().apply {\n                    val sId = cursor.getString(contactIdIndex)\n\n                    name = cursor.getString(nameIndex)\n                    image = cursor.getString(photoIndex)\n\n                    setContactNumber(sId, this, contentResolver)\n\n                    setContactEmail(sId, this, contentResolver)\n\n                    id = sId.toInt()\n                }\n                contacts.add(contact)\n            }\n            cursor.close()\n        }\n        return contacts\n    }\n\n    private fun setContactNumber(\n        id: String, contact: ContactEntity, contentResolver: ContentResolver\n    ) {\n        contentResolver.query(\n            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,\n            null,\n            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + \" = ?\",\n            arrayOf(id),\n            null\n        )?.use { phoneCursor ->\n            val hasPhoneNumberIndex =\n                phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER)\n            val numberIndex =\n                phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)\n            while (phoneCursor.moveToNext()) {\n                if (phoneCursor.getInt(hasPhoneNumberIndex) > 0) {\n                    contact.phoneNumber = phoneCursor.getString(numberIndex)\n                }\n            }\n            phoneCursor.close()\n        }\n\n    }\n\n    private fun setContactEmail(\n        id: String, contact: ContactEntity, contentResolver: ContentResolver\n    ) {\n\n        contentResolver.query(\n            ContactsContract.CommonDataKinds.Email.CONTENT_URI,\n            null,\n            ContactsContract.CommonDataKinds.Email.CONTACT_ID + \" = ?\", arrayOf(id), null\n        )?.use { emailCursor ->\n            val emailIndex =\n                emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS)\n            while (emailCursor.moveToNext()) {\n                contact.email = emailCursor.getString(emailIndex)\n            }\n        }\n    }\n\n\n    fun getContactsById(id: String): ContactEntity {\n        val contentResolver: ContentResolver = context.contentResolver\n        val contact = ContactEntity()\n        contentResolver.query(\n            ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts._ID+ \" = ?\", arrayOf(id), null\n        )?.use { cursor ->\n            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)\n            val photoIndex = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)\n            cursor.moveToNext()\n            contact.apply {\n                this.id = id.toInt()\n                name = cursor.getString(nameIndex)\n                image = cursor.getString(photoIndex)\n\n                setContactNumber(id, this, contentResolver)\n\n                setContactEmail(id, this, contentResolver)\n            }\n            cursor.close()\n        }\n        return contact\n    }\n\n\n    fun getIdsContacts(): List<Int> {\n        val contentResolver: ContentResolver = context.contentResolver\n        val contactsIds = mutableListOf<Int>()\n        contentResolver.query(\n            ContactsContract.Contacts.CONTENT_URI, null, null, null, null\n        )?.use { cursor ->\n            val contactIdIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID)\n            while (cursor.moveToNext()) {\n                contactsIds.add(cursor.getString(contactIdIndex).toInt())\n            }\n        }\n        return contactsIds\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt b/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt
+--- a/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt	(revision e72253f9000b0aa603d7ff4e6629ae4ef8101538)
++++ b/app/src/main/java/com/example/soroushplusproject/data/contents/ContactProvider.kt	(date 1687085759635)
+@@ -65,7 +65,6 @@
+             }
+             phoneCursor.close()
+         }
+-
+     }
+ 
+     private fun setContactEmail(
