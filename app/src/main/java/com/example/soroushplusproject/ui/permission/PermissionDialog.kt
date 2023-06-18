@@ -6,8 +6,6 @@ import com.example.soroushplusproject.databinding.DialogPermissionBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-typealias onSetContinue = () -> Unit
-
 fun Context.showDialog(onGetPermission: onSetContinue) {
 
 
