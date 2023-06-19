@@ -17,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ContactViewModel @Inject constructor(
     private val getAllContactUseCase: GetAllContactUseCase,
-    private val syncContactsUseCase: SyncContactsUseCase
 ) : ViewModel() {
     private val _contacts = MutableLiveData<InteractResultState<List<ContactItem>>>()
     val contacts: LiveData<InteractResultState<List<ContactItem>>> = _contacts
@@ -32,12 +31,6 @@ class ContactViewModel @Inject constructor(
             getAllContactUseCase(Unit).collectLatest {
                 _contacts.postValue(it)
             }
-        }
-    }
-
-    fun sync() {
-        viewModelScope.launch {
-            syncContactsUseCase(Unit)
         }
     }
 }
