@@ -19,5 +19,7 @@ interface LocalDataSource {
 
     suspend fun updateContact(contact: ContactEntity)
 
+    fun searchContacts(query: String): Flow<List<ContactEntity>>
+
 
 }
