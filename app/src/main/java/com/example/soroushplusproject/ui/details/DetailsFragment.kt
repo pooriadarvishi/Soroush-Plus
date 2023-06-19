@@ -36,7 +36,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
     }
 
     private fun onObserve() {
-        detailsViewModel.contact.observe(viewLifecycleOwner) { contact ->
+        detailsViewModel.dataState.observe(viewLifecycleOwner) { contact ->
             when (contact) {
                 InteractResultState.Empty -> {}
                 InteractResultState.Error -> {}
