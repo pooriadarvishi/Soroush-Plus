@@ -27,7 +27,6 @@
         android:elevation="@dimen/_4dp">
         <shape>
             <corners android:radius="@dimen/_8dp"/>
-            <solid android:color="@color/button_dark" />
         </shape>
     </item>
 </shape>

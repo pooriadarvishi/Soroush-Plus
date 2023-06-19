@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -71,6 +72,7 @@ class ContactFragment : Fragment() {
     private fun setUi() {
         setRecyclerView()
         onObserve()
+        setSearchView()
     }
 
 
@@ -91,6 +93,23 @@ class ContactFragment : Fragment() {
         binding.progressBar.isInvisible = true
         binding.tvNotFind.isInvisible = true
         binding.rvContacts.isInvisible = false
+    }
 
+
+    private fun setSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrEmpty()) {
+                    contactViewModel.searchContact(newText)
+                } else {
+                    contactViewModel.startShowAllContact()
+                }
+                return true
+            }
+        })
     }
 }

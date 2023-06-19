@@ -9,6 +9,7 @@ import com.example.soroushplusproject.domain.interact_result.InteractResultState
 import com.example.soroushplusproject.domain.interactors.GetContactByIdUseCase
 import com.example.soroushplusproject.ui.models.ContactDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,7 @@ class DetailsViewModel @Inject constructor(
     private fun getContactById(contactId: Int) {
         val params = GetContactByIdUseCase.Params(contactId)
         viewModelScope.launch {
+            delay(1000)
             getContactByIdUseCase(params).collect { contact ->
                 _contact.postValue(contact)
             }
