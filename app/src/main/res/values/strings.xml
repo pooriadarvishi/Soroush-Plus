@@ -12,4 +12,6 @@
     <string name="Permission_granted">اجازه دسترسی به مخاطبین</string>
     <string name="permission_request">برنامه باید به مخاطبین شما دسترسی داشته باشد تا بتواند آنهارا به شما نمایش دهد</string>
     <string name="continue_permission">ادامه</string>
+    <string name="syncing">در حال همگان سازی</string>
+    <string name="syncing_success">همگان سازی کامل شد</string>
 </resources>

@@ -6,7 +6,7 @@ import com.example.soroushplusproject.databinding.DialogPermissionBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-fun Context.showDialog(onGetPermission: onSetContinue) {
+fun Context.showDialog(onGetPermission: onClick, onFailedPermission: onClick) {
 
 
     val dialogView = DialogPermissionBinding.inflate(LayoutInflater.from(this))
@@ -17,14 +17,21 @@ fun Context.showDialog(onGetPermission: onSetContinue) {
     val dialog = MaterialAlertDialogBuilder(this).setView(
         dialogView.root
     ).show()
-    neverMindButton.setOnClickListener {
+
+    fun dismiss() {
         dialog.dismiss()
     }
 
+    neverMindButton.setOnClickListener {
+        onFailedPermission()
+        dismiss()
+    }
+
     continueButton.setOnClickListener {
-        dialog.dismiss()
+        dismiss()
         onGetPermission()
     }
+
 
 
 }
