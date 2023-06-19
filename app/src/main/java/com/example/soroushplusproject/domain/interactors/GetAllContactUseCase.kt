@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAllContactUseCase @Inject constructor(private val repository: Repository) :
-    InteractResult<List<ContactItem>, Nothing>() {
-    override fun doWork(params: Nothing): Flow<List<ContactItem>> = repository.getAllContact()
+    InteractResult<List<ContactItem>, Unit>() {
+    override fun doWork(params: Unit): Flow<List<ContactItem>> = repository.getAllContact()
 }
