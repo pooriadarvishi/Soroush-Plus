@@ -3,8 +3,8 @@ package com.example.soroushplusproject.data.local
 import com.example.soroushplusproject.data.model.ContactEntity
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.ui.models.ContactItem
-import com.example.soroushplusproject.util.mappers.EntityToDetails
-import com.example.soroushplusproject.util.mappers.EntityToItem
+import com.example.soroushplusproject.data.mappers.EntityToDetails
+import com.example.soroushplusproject.data.mappers.EntityToItem
 import com.example.soroushplusproject.util.mappers.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

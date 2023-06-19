@@ -9,8 +9,8 @@ import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.data.local.ContactDataBase
 import com.example.soroushplusproject.data.local.LocalDataSource
 import com.example.soroushplusproject.data.local.LocalDataSourceImpl
-import com.example.soroushplusproject.util.mappers.EntityToDetails
-import com.example.soroushplusproject.util.mappers.EntityToItem
+import com.example.soroushplusproject.data.mappers.EntityToDetails
+import com.example.soroushplusproject.data.mappers.EntityToItem
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
