@@ -12,7 +12,7 @@ interface ContactDao {
     @Upsert
     suspend fun insertContacts(contacts: List<ContactEntity>)
 
-    @Query("SELECT * FROM contact_table ORDER BY name ASC")
+    @Query("SELECT * FROM contact_table ORDER BY name COLLATE NOCASE ASC")
     fun getAllContacts(): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contact_table WHERE id = :id")
