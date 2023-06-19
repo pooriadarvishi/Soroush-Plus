@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
+import com.example.soroushplusproject.domain.interact_result.InteractResultState
 import com.example.soroushplusproject.ui.models.ContactDetails
-import com.example.soroushplusproject.util.isGrantedPermission
 import com.example.soroushplusproject.util.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +25,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentDetailsBinding.inflate(inflater)
         return binding.root
     }
@@ -34,11 +35,6 @@ class DetailsFragment : Fragment() {
         onObserve()
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkPermission()
-
-    }
 
     private fun onBind(contactDetails: ContactDetails) {
         binding.apply {
@@ -51,16 +47,12 @@ class DetailsFragment : Fragment() {
 
     private fun onObserve() {
         detailsViewModel.contact.observe(viewLifecycleOwner) { contact ->
-            onBind(contact)
+            when (contact) {
+                InteractResultState.Empty -> {}
+                InteractResultState.Error -> {}
+                InteractResultState.Loading -> {}
+                is InteractResultState.Success -> onBind(contact.result)
+            }
         }
-    }
-
-    private fun checkPermission() {
-        if (!requireContext().isGrantedPermission()) sync()
-    }
-
-
-    private fun sync() {
-        detailsViewModel.sync()
     }
 }

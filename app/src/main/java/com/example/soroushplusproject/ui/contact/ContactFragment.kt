@@ -10,8 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soroushplusproject.databinding.FragmentContactBinding
+import com.example.soroushplusproject.domain.interact_result.InteractResultState
 import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
-import com.example.soroushplusproject.util.isGrantedPermission
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -36,19 +36,6 @@ class ContactFragment : Fragment() {
         setUi()
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkPermission()
-    }
-
-    private fun sync() {
-        contactViewModel.sync()
-    }
-
-    private fun checkPermission() {
-        if (requireContext().isGrantedPermission()) sync()
-    }
-
 
     private fun setRecyclerView() {
         navController = findNavController()
@@ -69,7 +56,13 @@ class ContactFragment : Fragment() {
 
     private fun onObserve() {
         contactViewModel.contacts.observe(viewLifecycleOwner) { contacts ->
-            adapter.submitList(contacts)
+            when (contacts) {
+                InteractResultState.Empty -> {}
+                InteractResultState.Error -> {}
+                InteractResultState.Loading -> {}
+                is InteractResultState.Success -> adapter.submitList(contacts.result)
+            }
+
         }
     }
 

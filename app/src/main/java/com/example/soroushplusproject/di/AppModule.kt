@@ -41,7 +41,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideContactProvider(
+    fun provideContentObserver(
         application: Application, localDataSource: LocalDataSource
     ): ContentObserver = ContentObserver(application, localDataSource)
 

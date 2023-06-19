@@ -9,7 +9,9 @@ abstract class Interact<T> {
         emit(InteractState.Loading)
         doWork(params)
         emit(InteractState.Success)
-    }.catch { emit(InteractState.Error) }
+    }.catch {
+        emit(InteractState.Error)
+    }
 
 
     protected abstract suspend fun doWork(params: T)

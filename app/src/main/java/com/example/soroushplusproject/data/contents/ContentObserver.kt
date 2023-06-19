@@ -4,10 +4,11 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.ContentObserver
 import android.provider.ContactsContract
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.soroushplusproject.data.local.LocalDataSource
 import com.example.soroushplusproject.data.model.ContactEntity
-import com.example.soroushplusproject.util.isGrantedPermission
+import com.example.soroushplusproject.util.grantedPermission
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,7 +30,8 @@ class ContentObserver(
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
         job.cancel()
-        if (context.isGrantedPermission()) coroutineScope.launch { syncContacts() }
+        if (context.grantedPermission()) coroutineScope.launch {
+            syncContacts() }
     }
 
     suspend fun syncContacts() {
