@@ -32,17 +32,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mainViewModel.dataState.observe(this) { dataState ->
-            when (dataState) {
-                InteractState.Error -> onSync()
-                InteractState.Loading -> onToastLoading()
-                InteractState.Success -> onToastSuccess()
-            }
-        }
+        observe()
     }
 
+
     override fun onResume() {
-        unShowingDialog()
         onSync()
         super.onResume()
     }
@@ -52,29 +46,34 @@ class MainActivity : AppCompatActivity() {
         unObserveContact()
     }
 
-
-    private fun onSync() {
-        if (!dialogShowingState()) {
-            if (!permissionState() && permissionRequireState()) {
-                onShowingDialog()
-                onPopUpDialogPermission()
-            } else if (!permissionState() && !permissionRequireState()) {
-                onShowingDialog()
-                onSettingDialogPermission()
-            } else mainViewModel.sync()
+    private fun observe() {
+        mainViewModel.dataState.observe(this) { dataState ->
+            when (dataState) {
+                InteractState.Error -> onToastError()
+                InteractState.Loading -> onToastLoading()
+                InteractState.Success -> onToastSuccess()
+            }
         }
     }
 
 
+    private fun onSync() {
+        if (!permissionState() && permissionRequireState()) {
+            onPopUpDialogPermission()
+        } else if (!permissionState() && !permissionRequireState()) {
+            onSettingDialogPermission()
+        } else mainViewModel.sync()
+    }
+
+
     private fun onGrantedPermission() {
-        unShowingDialog()
+        observe()
         observeContacts()
         mainViewModel.grantedPermission()
         mainViewModel.sync()
     }
 
     private fun unGrantedPermission() {
-        unShowingDialog()
         mainViewModel.unGrantedPermission()
         mainViewModel.sync()
     }
@@ -92,7 +91,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun settingPermissionLauncher() {
-        unShowingDialog()
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         val uri = Uri.fromParts("package", packageName, null)
         intent.data = uri
@@ -127,20 +125,14 @@ class MainActivity : AppCompatActivity() {
         onToast(getString(R.string.syncing_success))
     }
 
+    private fun onToastError() {
+        onToast(getString(R.string.permissionFaild))
+    }
+
 
     private fun onToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
-
-    private fun unShowingDialog() {
-        mainViewModel.dialogUnShowing()
-    }
-
-    private fun onShowingDialog() {
-        mainViewModel.dialogShowing()
-    }
-
-    private fun dialogShowingState() = mainViewModel.dialogShowState()
 
 
 }

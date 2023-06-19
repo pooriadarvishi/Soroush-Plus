@@ -19,7 +19,6 @@ class MainViewModel @Inject constructor(
     private val contentObserver: ContentObserver
 ) : ViewModel() {
     private var isGrantedPermission = true
-    private var dialogShowState = false
 
     private val _dataState = MutableLiveData<InteractState>()
     val dataState: LiveData<InteractState> = _dataState
@@ -47,15 +46,4 @@ class MainViewModel @Inject constructor(
 
     fun contentObserver() = contentObserver
 
-
-
-    fun dialogShowing(){
-        dialogShowState = true
-    }
-
-    fun dialogUnShowing(){
-        dialogShowState = false
-    }
-
-    fun dialogShowState() = dialogShowState
 }
