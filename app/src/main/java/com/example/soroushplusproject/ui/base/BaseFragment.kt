@@ -35,5 +35,5 @@ abstract class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRe
     }
 
 
-    abstract fun setUi()
+    protected abstract fun setUi()
 }
