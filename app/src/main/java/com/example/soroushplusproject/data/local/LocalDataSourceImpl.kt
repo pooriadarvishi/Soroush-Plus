@@ -36,6 +36,6 @@ class LocalDataSourceImpl(
         contactDao.updateContact(contact)
     }
 
-    override fun searchContacts(query: String): Flow<List<ContactEntity>> =
-        contactDao.searchContacts("%$query%")
+    override fun searchContacts(query: String): Flow<List<ContactItem>> =
+        contactDao.searchContacts("%$query%").map { entityToItem.map(it) }
 }

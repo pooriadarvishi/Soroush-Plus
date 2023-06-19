@@ -5,7 +5,6 @@ import com.example.soroushplusproject.data.local.LocalDataSource
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.ui.models.ContactItem
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 class RepositoryImpl (
     private val localDataSource: LocalDataSource,
@@ -17,10 +16,12 @@ class RepositoryImpl (
         contentObserver.syncContacts()
     }
 
-
     override fun getAllContact(): Flow<List<ContactItem>> = localDataSource.getAllContacts()
 
 
     override fun getContactById(id: Int): Flow<ContactDetails> = localDataSource.getContactById(id)
+    override fun searchContacts(query: String): Flow<List<ContactItem>> =
+        localDataSource.searchContacts(query)
+
 
 }

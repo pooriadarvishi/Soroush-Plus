@@ -1,5 +1,6 @@
 package com.example.soroushplusproject.data
 
+import com.example.soroushplusproject.data.model.ContactEntity
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.ui.models.ContactItem
 import kotlinx.coroutines.flow.Flow
@@ -14,5 +15,7 @@ interface Repository {
 
 
     fun getContactById(id: Int): Flow<ContactDetails>
+
+    fun searchContacts(query : String) : Flow<List<ContactItem>>
 
 }
