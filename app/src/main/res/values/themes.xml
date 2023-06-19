@@ -12,5 +12,6 @@
     </style>
 
     <color name="button">@color/purple_light</color>
+    <color name="card">@color/purple_night</color>
     <color name="icon">@color/black</color>
 </resources>

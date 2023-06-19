@@ -6,5 +6,6 @@
     </style>
 
     <color name="button">@color/purple_night</color>
+    <color name="card">@color/purple_light</color>
     <color name="icon">@color/white</color>
 </resources>

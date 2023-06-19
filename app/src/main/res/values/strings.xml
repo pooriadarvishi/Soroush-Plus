@@ -17,4 +17,6 @@
     <string name="permissionFaild">دسترسی به مخاطبین داده نشد.</string>
     <string name="cant_find_contact">مخاطبی پیدا نشد</string>
     <string name="search">جست و جو...</string>
+    <string name="p">P</string>
+    <string name="image_profile">imageProfile</string>
 </resources>

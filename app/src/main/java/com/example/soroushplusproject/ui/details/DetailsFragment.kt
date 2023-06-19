@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
 import com.example.soroushplusproject.domain.interact_result.InteractResultState
 import com.example.soroushplusproject.ui.models.ContactDetails
+import com.example.soroushplusproject.util.asFirst
 import com.example.soroushplusproject.util.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +43,11 @@ class DetailsFragment : Fragment() {
             tvPhoneNumber.text = contactDetails.phoneNumber
             tvEmail.text = contactDetails.email
             tvNameContact.text = contactDetails.name
-            contactDetails.image?.let { igContactProfile.loadImage(it) }
+            if (!contactDetails.name.isNullOrEmpty()) tvName.text = contactDetails.name.asFirst()
+            contactDetails.image?.let {
+                igContactProfile.loadImage(it)
+                binding.tvName.isInvisible = true
+            }
         }
     }
 

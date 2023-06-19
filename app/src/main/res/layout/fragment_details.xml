@@ -27,11 +27,34 @@
                 tools:context=".ui.details.DetailsFragment">
 
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/ig_contactProfile"
-                    android:layout_width="@dimen/_150dp"
-                    android:layout_height="@dimen/_150dp"
-                    android:src="@drawable/profile" />
+                <com.google.android.material.circularreveal.cardview.CircularRevealCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10dp"
+                    app:cardBackgroundColor="@color/card"
+                    app:cardCornerRadius="@dimen/_100dp"
+                    app:cardElevation="@dimen/cardview_compat_inset_shadow">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ig_contactProfile"
+                        android:layout_width="@dimen/_150dp"
+                        android:layout_height="@dimen/_150dp"
+                        android:contentDescription="@string/image_profile" />
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="@dimen/_150dp"
+                        android:layout_height="@dimen/_150dp"
+                        android:fontFamily="@font/arizonia"
+                        android:gravity="center"
+                        android:text="@string/p"
+                        android:textColor="@color/icon"
+                        android:textSize="@dimen/_48sp"
+                        android:textStyle="bold" />
+
+
+                </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+
 
                 <TextView
                     android:id="@+id/tv_nameContact"
