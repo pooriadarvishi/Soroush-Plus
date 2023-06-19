@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.soroushplusproject.domain.interact_result.InteractResultState
+import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.domain.interactors.GetContactByIdUseCase
 import com.example.soroushplusproject.ui.models.ContactDetails
 import dagger.hilt.android.lifecycle.HiltViewModel

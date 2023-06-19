@@ -8,7 +8,7 @@ import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
-import com.example.soroushplusproject.domain.interact_result.InteractResultState
+import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.ui.models.ContactDetails
 import com.example.soroushplusproject.util.asFirst
 import com.example.soroushplusproject.util.loadImage

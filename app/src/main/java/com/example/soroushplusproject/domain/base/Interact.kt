@@ -1,4 +1,4 @@
-package com.example.soroushplusproject.domain.interact
+package com.example.soroushplusproject.domain.base
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

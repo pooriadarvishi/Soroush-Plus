@@ -11,7 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.soroushplusproject.R
-import com.example.soroushplusproject.domain.interact.InteractState
+import com.example.soroushplusproject.domain.base.InteractState
 import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.grantedPermission
 import com.google.android.material.snackbar.Snackbar

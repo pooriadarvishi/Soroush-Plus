@@ -1,4 +1,4 @@
-package com.example.soroushplusproject.domain.interact_result
+package com.example.soroushplusproject.domain.base
 
 sealed interface InteractResultState<out T> {
     object Loading : InteractResultState<Nothing>

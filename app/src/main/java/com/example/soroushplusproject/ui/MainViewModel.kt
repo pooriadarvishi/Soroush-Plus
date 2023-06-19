@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.soroushplusproject.data.contents_provider.ContentObserver
-import com.example.soroushplusproject.domain.interact.InteractState
+import com.example.soroushplusproject.domain.base.InteractState
 import com.example.soroushplusproject.domain.interactors.SyncContactsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

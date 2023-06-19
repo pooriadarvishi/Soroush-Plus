@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.soroushplusproject.domain.interact_result.InteractResultState
+import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.domain.interactors.GetAllContactUseCase
 import com.example.soroushplusproject.domain.interactors.SearchContactsUseCse
 import com.example.soroushplusproject.ui.models.ContactItem
