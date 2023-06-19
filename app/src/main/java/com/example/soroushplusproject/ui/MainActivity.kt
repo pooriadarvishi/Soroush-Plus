@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +13,7 @@ import com.example.soroushplusproject.R
 import com.example.soroushplusproject.domain.interact.InteractState
 import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.grantedPermission
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity() {
     private fun observe() {
         mainViewModel.dataState.observe(this) { dataState ->
             when (dataState) {
-                InteractState.Error -> onToastError()
-                InteractState.Loading -> onToastLoading()
-                InteractState.Success -> onToastSuccess()
+                InteractState.Error -> onSnackBarError()
+                InteractState.Loading -> onSnackBarLoading()
+                InteractState.Success -> onSnackBarSuccess()
             }
         }
     }
@@ -117,21 +117,21 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun onToastLoading() {
-        onToast(getString(R.string.syncing))
+    private fun onSnackBarLoading() {
+        onSnackBar(getString(R.string.syncing))
     }
 
-    private fun onToastSuccess() {
-        onToast(getString(R.string.syncing_success))
+    private fun onSnackBarSuccess() {
+        onSnackBar(getString(R.string.syncing_success))
     }
 
-    private fun onToastError() {
-        onToast(getString(R.string.permissionFaild))
+    private fun onSnackBarError() {
+        onSnackBar(getString(R.string.permissionFaild))
     }
 
 
-    private fun onToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    private fun onSnackBar(text: String) {
+        Snackbar.make(window.decorView.rootView, text, Snackbar.LENGTH_SHORT).show()
     }
 
 
