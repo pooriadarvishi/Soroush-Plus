@@ -40,7 +40,7 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(R.layout.fragment_c
     }
 
     private fun onObserve() {
-        contactViewModel.contacts.observe(viewLifecycleOwner) { contacts ->
+        contactViewModel.dataState.observe(viewLifecycleOwner) { contacts ->
             when (contacts) {
                 InteractResultState.Empty -> bindEmpty()
                 InteractResultState.Error -> {}
