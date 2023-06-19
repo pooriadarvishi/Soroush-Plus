@@ -15,6 +15,10 @@ interface ContactDao {
     @Query("SELECT * FROM contact_table ORDER BY name COLLATE NOCASE ASC")
     fun getAllContacts(): Flow<List<ContactEntity>>
 
+
+    @Query("SELECT * FROM contact_table WHERE name LIKE :query OR number LIKE :query ORDER BY name COLLATE NOCASE ASC")
+    fun searchContacts(query: String): Flow<List<ContactEntity>>
+
     @Query("SELECT * FROM contact_table WHERE id = :id")
     fun getContactById(id: Int): Flow<ContactEntity>
 
