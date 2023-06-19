@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
@@ -50,9 +51,21 @@ class DetailsFragment : Fragment() {
             when (contact) {
                 InteractResultState.Empty -> {}
                 InteractResultState.Error -> {}
-                InteractResultState.Loading -> {}
-                is InteractResultState.Success -> onBind(contact.result)
+                InteractResultState.Loading -> bindLoading()
+                is InteractResultState.Success -> bindSuccess(contact.result)
             }
         }
+    }
+
+
+    private fun bindLoading() {
+        binding.svDetails.isInvisible = true
+        binding.progressBar.isInvisible = false
+    }
+
+    private fun bindSuccess(contactDetails: ContactDetails) {
+        onBind(contactDetails)
+        binding.svDetails.isInvisible = false
+        binding.progressBar.isInvisible = true
     }
 }
