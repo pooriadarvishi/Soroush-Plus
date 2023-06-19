@@ -7,6 +7,10 @@
 
     <style name="Theme.SoroushPlusProject" parent="Base.Theme.SoroushPlusProject" />
 
+    <style name="iransans_font" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/iransans</item>
+    </style>
+
     <color name="button">@color/purple_light</color>
     <color name="icon">@color/black</color>
 </resources>

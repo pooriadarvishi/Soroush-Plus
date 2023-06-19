@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:queryBackground="@android:color/transparent"
-            app:queryHint="جست و جو..." />
+            app:queryHint="@string/search" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_contacts"

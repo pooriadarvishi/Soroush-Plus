@@ -39,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20dp"
                     android:layout_marginBottom="@dimen/_50dp"
+                    android:fontFamily="@font/iransans"
                     android:gravity="center"
                     android:text="@string/pooria_darvishi"
                     android:textSize="@dimen/_30sp"
@@ -63,6 +64,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:text="@string/contact_info"
+                            android:fontFamily="@font/iransans"
                             android:textSize="@dimen/_10sp"
                             android:textStyle="bold" />
 
@@ -81,6 +83,7 @@
                             <TextView
                                 android:id="@+id/tv_phoneNumber"
                                 android:layout_width="0dp"
+                                android:fontFamily="@font/iransans"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"

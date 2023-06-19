@@ -35,6 +35,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_10dp"
                 android:padding="@dimen/_10dp"
+                android:fontFamily="@font/iransans"
                 android:text="@string/pooria_darvishi"
                 android:textSize="@dimen/_20sp" />
 
