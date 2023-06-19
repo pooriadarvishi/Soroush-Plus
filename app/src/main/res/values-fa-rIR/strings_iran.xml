@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">سروش پلاس</string>
+    <string name="get_contact">گرفتن مخاطبین</string>
+    <string name="setting">رفتن تنظیمات</string>
+    <string name="never_mind">فعلا نه</string>
+    <string name="pooria_darvishi">پوریا درویشی</string>
+    <string name="phone_number">شماره تلفن</string>
+    <string name="phone_number_example">۰۹۲۰۲۱۲۲۵۱۵</string>
+    <string name="email_example">pooria.darvishi.82@gmail.com</string>
+    <string name="contact_info">اطلاعات کاربر</string>
+    <string name="Permission_granted">اجازه دسترسی به مخاطبین</string>
+    <string name="permission_request">برنامه باید به مخاطبین شما دسترسی داشته باشد تا بتواند آنهارا به شما نمایش دهد</string>
+    <string name="continue_permission">ادامه</string>
+    <string name="syncing">در حال همگام سازی</string>
+    <string name="syncing_success">همگاک سازی کامل شد</string>
+    <string name="permissionFaild">دسترسی به مخاطبین داده نشد.</string>
+    <string name="cant_find_contact">مخاطبی پیدا نشد</string>
+    <string name="search">جست و جو…</string>
+    <string name="p">پ</string>
+    <string name="image_profile">تصویر مخاطب</string>
+</resources>

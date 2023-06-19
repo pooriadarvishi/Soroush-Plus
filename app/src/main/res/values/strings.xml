@@ -1,22 +1,21 @@
 <resources>
-    <string name="app_name">Soroush Plus Project</string>
+    <string name="app_name">Soroush+</string>
     <string name="get_contact">Get Contact</string>
-    <string name="access_of_setting">Please enable access to contacts.</string>
     <string name="setting">setting</string>
-    <string name="never_mind">فعلا نه</string>
+    <string name="never_mind">Now not</string>
     <string name="pooria_darvishi">Pooria Darvishi</string>
     <string name="phone_number">PhoneNumber:</string>
     <string name="phone_number_example">09202122515</string>
     <string name="email_example">pooria.darvishi.82@gmail.com</string>
     <string name="contact_info">Contact Info:</string>
-    <string name="Permission_granted">اجازه دسترسی به مخاطبین</string>
-    <string name="permission_request">برنامه باید به مخاطبین شما دسترسی داشته باشد تا بتواند آنهارا به شما نمایش دهد</string>
-    <string name="continue_permission">ادامه</string>
-    <string name="syncing">در حال همگان سازی</string>
-    <string name="syncing_success">همگان سازی کامل شد</string>
-    <string name="permissionFaild">دسترسی به مخاطبین داده نشد.</string>
-    <string name="cant_find_contact">مخاطبی پیدا نشد</string>
-    <string name="search">جست و جو...</string>
+    <string name="Permission_granted">Allow access to contacts</string>
+    <string name="permission_request">The app must have access to your contacts in order to show them to you</string>
+    <string name="continue_permission">Continuation</string>
+    <string name="syncing">Synchronizing</string>
+    <string name="syncing_success">Universalization is complete</string>
+    <string name="permissionFaild">Access to contacts was not granted</string>
+    <string name="cant_find_contact">Contact not found</string>
+    <string name="search">search…</string>
     <string name="p">P</string>
     <string name="image_profile">imageProfile</string>
 </resources>
