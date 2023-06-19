@@ -1,4 +1,4 @@
-package com.example.soroushplusproject.domain
+package com.example.soroushplusproject.domain.interactors
 
 import com.example.soroushplusproject.data.Repository
 import com.example.soroushplusproject.domain.interact_result.InteractResult

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 abstract class InteractResult<T,Q> {
-    operator fun invoke(): Flow<InteractResultState<T>> = doWork().map { result ->
+    operator fun invoke(params: Q): Flow<InteractResultState<T>> = doWork(params).map { result ->
         if (result != null) InteractResultState.Success(result)
         else InteractResultState.Empty
     }.onStart { emit(InteractResultState.Loading) }.catch { emit(InteractResultState.Error) }

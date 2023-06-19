@@ -12,5 +12,5 @@ abstract class Interact<T> {
     }.catch { emit(InteractState.Error) }
 
 
-    protected abstract fun doWork(params: T)
+    protected abstract suspend fun doWork(params: T)
 }
