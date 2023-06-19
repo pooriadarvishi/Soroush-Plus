@@ -34,6 +34,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setUi()
+    }
+
+    private fun setUi(){
         root = findViewById(R.id.fragmentContainerView)
         observe()
     }
