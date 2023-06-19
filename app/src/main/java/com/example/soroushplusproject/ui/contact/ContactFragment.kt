@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soroushplusproject.databinding.FragmentContactBinding
 import com.example.soroushplusproject.domain.interact_result.InteractResultState
 import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
+import com.example.soroushplusproject.ui.models.ContactItem
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -57,10 +59,10 @@ class ContactFragment : Fragment() {
     private fun onObserve() {
         contactViewModel.contacts.observe(viewLifecycleOwner) { contacts ->
             when (contacts) {
-                InteractResultState.Empty -> {}
+                InteractResultState.Empty -> bindEmpty()
                 InteractResultState.Error -> {}
-                InteractResultState.Loading -> {}
-                is InteractResultState.Success -> adapter.submitList(contacts.result)
+                InteractResultState.Loading -> bindLoading()
+                is InteractResultState.Success -> bindSuccess(contacts.result)
             }
 
         }
@@ -69,5 +71,26 @@ class ContactFragment : Fragment() {
     private fun setUi() {
         setRecyclerView()
         onObserve()
+    }
+
+
+    private fun bindEmpty() {
+        binding.progressBar.isInvisible = true
+        binding.tvNotFind.isInvisible = false
+        binding.rvContacts.isInvisible = true
+    }
+
+    private fun bindLoading() {
+        binding.progressBar.isInvisible = false
+        binding.tvNotFind.isInvisible = true
+        binding.rvContacts.isInvisible = true
+    }
+
+    private fun bindSuccess(contacts: List<ContactItem>) {
+        adapter.submitList(contacts)
+        binding.progressBar.isInvisible = true
+        binding.tvNotFind.isInvisible = true
+        binding.rvContacts.isInvisible = false
+
     }
 }
