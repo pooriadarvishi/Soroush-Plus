@@ -2,7 +2,6 @@ package com.example.soroushplusproject.data.mappers
 
 import com.example.soroushplusproject.data.model.ContactEntity
 import com.example.soroushplusproject.ui.models.ContactItem
-import com.example.soroushplusproject.util.mappers.Mapper
 import javax.inject.Inject
 
 class EntityToItem @Inject constructor() : Mapper<ContactEntity, ContactItem> {

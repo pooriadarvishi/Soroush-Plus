@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.soroushplusproject.data.Repository
 import com.example.soroushplusproject.data.RepositoryImpl
-import com.example.soroushplusproject.data.contents.ContentObserver
+import com.example.soroushplusproject.data.contents_provider.ContentObserver
 import com.example.soroushplusproject.data.local.ContactDao
 import com.example.soroushplusproject.data.local.ContactDataBase
 import com.example.soroushplusproject.data.local.LocalDataSource

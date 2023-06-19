@@ -1,10 +1,9 @@
-package com.example.soroushplusproject.data.contents
+package com.example.soroushplusproject.data.contents_provider
 
 import android.content.ContentResolver
 import android.content.Context
 import android.database.ContentObserver
 import android.provider.ContactsContract
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.soroushplusproject.data.local.LocalDataSource
 import com.example.soroushplusproject.data.model.ContactEntity

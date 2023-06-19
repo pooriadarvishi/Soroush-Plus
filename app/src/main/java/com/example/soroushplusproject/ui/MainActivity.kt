@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Settings
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,11 +28,13 @@ class MainActivity : AppCompatActivity() {
 
 
     private val mainViewModel: MainViewModel by viewModels()
+    private lateinit var root: View
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        root = findViewById(R.id.fragmentContainerView)
         observe()
     }
 
@@ -49,9 +52,9 @@ class MainActivity : AppCompatActivity() {
     private fun observe() {
         mainViewModel.dataState.observe(this) { dataState ->
             when (dataState) {
-                InteractState.Error -> onSnackBarError()
-                InteractState.Loading -> onSnackBarLoading()
-                InteractState.Success -> onSnackBarSuccess()
+                InteractState.Error -> onShowSnackBarError()
+                InteractState.Loading -> onShowSnackBarLoading()
+                InteractState.Success -> onShowSnackBarSuccess()
             }
         }
     }
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         if (!permissionState() && permissionRequireState()) {
             onPopUpDialogPermission()
         } else if (!permissionState() && !permissionRequireState()) {
-            onSettingDialogPermission()
+            onShowSettingDialogPermission()
         } else mainViewModel.sync()
     }
 
@@ -82,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         this.showDialog(onGetPermission = actionGranted) { unGrantedPermission() }
     }
 
-    private fun onSettingDialogPermission() {
+    private fun onShowSettingDialogPermission() {
         onDialog { settingPermissionLauncher() }
     }
 
@@ -117,21 +120,21 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun onSnackBarLoading() {
-        onSnackBar(getString(R.string.syncing))
+    private fun onShowSnackBarLoading() {
+        onShowSnackBar(getString(R.string.syncing))
     }
 
-    private fun onSnackBarSuccess() {
-        onSnackBar(getString(R.string.syncing_success))
+    private fun onShowSnackBarSuccess() {
+        onShowSnackBar(getString(R.string.syncing_success))
     }
 
-    private fun onSnackBarError() {
-        onSnackBar(getString(R.string.permissionFaild))
+    private fun onShowSnackBarError() {
+        onShowSnackBar(getString(R.string.permissionFaild))
     }
 
 
-    private fun onSnackBar(text: String) {
-        Snackbar.make(window.decorView.rootView, text, Snackbar.LENGTH_SHORT).show()
+    private fun onShowSnackBar(text: String) {
+        Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
 
