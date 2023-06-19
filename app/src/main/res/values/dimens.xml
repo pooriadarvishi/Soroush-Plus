@@ -22,4 +22,6 @@
     <dimen name="_100dp">100dp</dimen>
     <dimen name="_50sp">50sp</dimen>
     <dimen name="_48sp">48sp</dimen>
+    <dimen name="_12dp">12dp</dimen>
+    <dimen name="_48dp">48dp</dimen>
 </resources>
