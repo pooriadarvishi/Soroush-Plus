@@ -49,9 +49,10 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
 
 
     private fun bindLoading() {
+        binding.shimmerViewContainer.startShimmer()
         binding.svDetails.isInvisible = true
         binding.tvNotFind.isInvisible = true
-        binding.progressBar.isInvisible = false
+        binding.shimmerViewContainer.isInvisible = false
     }
 
     private fun bindError() {
@@ -61,16 +62,18 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
     }
 
     private fun bindEmpty() {
+        binding.shimmerViewContainer.stopShimmer()
         binding.svDetails.isInvisible = true
         binding.tvNotFind.isInvisible = false
-        binding.progressBar.isInvisible = true
+        binding.shimmerViewContainer.isInvisible = true
     }
 
     private fun bindSuccess(contactDetails: ContactDetails) {
+        binding.shimmerViewContainer.stopShimmer()
         onBind(contactDetails)
         binding.svDetails.isInvisible = false
         binding.tvNotFind.isInvisible = true
-        binding.progressBar.isInvisible = true
+        binding.shimmerViewContainer.isInvisible = true
     }
 
     override fun setUi() {
