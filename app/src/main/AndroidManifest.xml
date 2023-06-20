@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SoroushPlusProject"
         tools:targetApi="31">
+        <service android:name=".data.services.ContactService" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
