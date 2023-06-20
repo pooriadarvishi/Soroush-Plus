@@ -25,10 +25,18 @@ class MainViewModel @Inject constructor(
     private var job: Job? = null
 
 
-    fun sync() {
+    fun firstSync() {
         job?.cancel()
         job = viewModelScope.launch {
             syncContactsUseCase(Unit).collect { _dataState.postValue(it) }
+        }
+    }
+
+
+    fun otherSync() {
+        job?.cancel()
+        job = viewModelScope.launch {
+            contentObserver.syncContacts()
         }
     }
 
@@ -43,7 +51,5 @@ class MainViewModel @Inject constructor(
 
     fun permissionRequireState() = isGrantedPermission
 
-
-    fun contentObserver() = contentObserver
 
 }
