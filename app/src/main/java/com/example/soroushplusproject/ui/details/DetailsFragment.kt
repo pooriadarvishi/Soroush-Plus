@@ -50,6 +50,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
 
     private fun bindLoading() {
         binding.svDetails.isInvisible = true
+        binding.tvNotFind.isInvisible = true
         binding.progressBar.isInvisible = false
     }
 
@@ -61,12 +62,14 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
 
     private fun bindEmpty() {
         binding.svDetails.isInvisible = true
-        binding.progressBar.isInvisible = false
+        binding.tvNotFind.isInvisible = false
+        binding.progressBar.isInvisible = true
     }
 
     private fun bindSuccess(contactDetails: ContactDetails) {
         onBind(contactDetails)
         binding.svDetails.isInvisible = false
+        binding.tvNotFind.isInvisible = true
         binding.progressBar.isInvisible = true
     }
 

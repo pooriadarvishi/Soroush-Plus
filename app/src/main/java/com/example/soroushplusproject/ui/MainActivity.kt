@@ -15,7 +15,7 @@ import com.example.soroushplusproject.domain.base.InteractState
 import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.grantedPermission
 import com.example.soroushplusproject.util.onShowSnackBar
-import com.example.soroushplusproject.util.onShowSnackBarWithAction
+import com.example.soroushplusproject.util.onShowSnackBarWithActionIndefinite
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onShowSnackBarError() {
-        onShowSnackBarWithAction(
+        onShowSnackBarWithActionIndefinite(
             root, getString(R.string.permissionFaild), getString(R.string.getpermission)
         ) {
             onSync()

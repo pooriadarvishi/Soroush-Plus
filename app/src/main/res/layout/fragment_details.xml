@@ -11,6 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_notFind"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/cant_find_contact"
+            android:textSize="@dimen/_24sp"
+            android:visibility="invisible"
+            app:drawableTopCompat="@drawable/ic_not_find"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rv_contacts" />
 
         <ScrollView
             android:id="@+id/sv_details"
