@@ -38,17 +38,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUi()
-        onSync()
+
     }
 
-    private fun setUi(){
-        root = findViewById(R.id.fragmentContainerView)
+    override fun onResume() {
+        super.onResume()
+        if (!permissionRequireState()) onShowSnackBarError()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
         unObserveContact()
+    }
+
+
+    private fun setUi() {
+        root = findViewById(R.id.fragmentContainerView)
+        onSync()
     }
 
     private fun observe() {
