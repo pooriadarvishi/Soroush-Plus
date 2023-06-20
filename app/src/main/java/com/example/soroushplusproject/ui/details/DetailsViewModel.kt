@@ -28,9 +28,12 @@ class DetailsViewModel @Inject constructor(
         contactId?.let { getContactById(it) }
     }
 
+    // delay for Create dynamic UI
+
     private fun getContactById(contactId: Int) {
         val params = GetContactByIdUseCase.Params(contactId)
         viewModelScope.launch {
+            delay(500)
             getContactByIdUseCase(params).collect { contact ->
                 _dataState.postValue(contact)
             }

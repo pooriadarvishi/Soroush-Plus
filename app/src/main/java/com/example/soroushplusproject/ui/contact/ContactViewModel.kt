@@ -8,6 +8,7 @@ import com.example.soroushplusproject.ui.base.BaseViewModel
 import com.example.soroushplusproject.data.model.ContactItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,9 +24,11 @@ class ContactViewModel @Inject constructor(
         getContacts()
     }
 
+    // delay for Create dynamic UI
     private fun getContacts() {
         job?.cancel()
         job = viewModelScope.launch {
+            delay(500)
             getAllContactUseCase(Unit).collect {
                 _dataState.postValue(it)
             }
@@ -35,6 +38,7 @@ class ContactViewModel @Inject constructor(
 
     fun searchContact(query: String) {
         job = viewModelScope.launch {
+            delay(500)
             searchContactsUseCse(query).collect {
                 _dataState.postValue(it)
             }
