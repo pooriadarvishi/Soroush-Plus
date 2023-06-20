@@ -19,4 +19,6 @@
     <string name="p">P</string>
     <string name="image_profile">imageProfile</string>
     <string name="getpermission">GetPermission</string>
+    <string name="receiving_problem">There was a problem receiving information</string>
+    <string name="retry">Retry</string>
 </resources>

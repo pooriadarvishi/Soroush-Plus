@@ -7,11 +7,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soroushplusproject.R
+import com.example.soroushplusproject.data.model.ContactItem
 import com.example.soroushplusproject.databinding.FragmentContactBinding
 import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.ui.base.BaseFragment
 import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
-import com.example.soroushplusproject.data.model.ContactItem
+import com.example.soroushplusproject.util.onShowSnackBarWithAction
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -43,7 +44,7 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(R.layout.fragment_c
         contactViewModel.dataState.observe(viewLifecycleOwner) { contacts ->
             when (contacts) {
                 InteractResultState.Empty -> bindEmpty()
-                InteractResultState.Error -> {}
+                InteractResultState.Error -> bindError()
                 InteractResultState.Loading -> bindLoading()
                 is InteractResultState.Success -> bindSuccess(contacts.result)
             }
@@ -75,6 +76,12 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(R.layout.fragment_c
         binding.progressBar.isInvisible = true
         binding.tvNotFind.isInvisible = true
         binding.rvContacts.isInvisible = false
+    }
+
+    private fun bindError() {
+        onShowSnackBarWithAction(
+            binding.root, getString(R.string.receiving_problem), getString(R.string.retry)
+        ) { contactViewModel.startShowAllContact() }
     }
 
 
