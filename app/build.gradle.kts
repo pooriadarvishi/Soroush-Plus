@@ -65,4 +65,6 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+
 }
