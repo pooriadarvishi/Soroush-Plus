@@ -3,12 +3,13 @@ package com.example.soroushplusproject.ui.details
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import com.example.soroushplusproject.R
+import com.example.soroushplusproject.data.model.ContactDetails
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
 import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.ui.base.BaseFragment
-import com.example.soroushplusproject.data.model.ContactDetails
 import com.example.soroushplusproject.util.asFirst
 import com.example.soroushplusproject.util.loadImage
+import com.example.soroushplusproject.util.onShowSnackBarWithAction
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -38,8 +39,8 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
     private fun onObserve() {
         detailsViewModel.dataState.observe(viewLifecycleOwner) { contact ->
             when (contact) {
-                InteractResultState.Empty -> {}
-                InteractResultState.Error -> {}
+                InteractResultState.Empty -> bindEmpty()
+                InteractResultState.Error -> bindError()
                 InteractResultState.Loading -> bindLoading()
                 is InteractResultState.Success -> bindSuccess(contact.result)
             }
@@ -48,6 +49,17 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(R.layout.fragment_d
 
 
     private fun bindLoading() {
+        binding.svDetails.isInvisible = true
+        binding.progressBar.isInvisible = false
+    }
+
+    private fun bindError() {
+        onShowSnackBarWithAction(
+            binding.root, getString(R.string.receiving_problem), getString(R.string.retry)
+        ) { detailsViewModel.getContact() }
+    }
+
+    private fun bindEmpty() {
         binding.svDetails.isInvisible = true
         binding.progressBar.isInvisible = false
     }
