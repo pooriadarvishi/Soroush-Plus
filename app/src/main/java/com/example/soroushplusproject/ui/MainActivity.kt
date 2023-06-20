@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onShowSnackBarError() {
         onShowSnackBarWithActionIndefinite(
-            root, getString(R.string.permissionFaild), getString(R.string.getpermission)
+            root, getString(R.string.permission_failed), getString(R.string.get_permission)
         ) {
             onSync()
         }

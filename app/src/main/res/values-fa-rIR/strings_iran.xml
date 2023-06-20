@@ -14,10 +14,13 @@
     <string name="continue_permission">ادامه</string>
     <string name="syncing">در حال همگام سازی</string>
     <string name="syncing_success">همگاک سازی کامل شد</string>
-    <string name="permissionFaild">دسترسی به مخاطبین داده نشد.</string>
-    <string name="cant_find_contact">مخاطبی پیدا نشد</string>
+    <string name="permission_failed">دسترسی به مخاطبین داده نشد.</string>
+    <string name="cant_find_contacts">مخاطبی پیدا نشد</string>
     <string name="search">جست و جو…</string>
     <string name="p">پ</string>
     <string name="image_profile">تصویر مخاطب</string>
-    <string name="getpermission">درخواست دسترسی</string>
+    <string name="get_permission">درخواست دسترسی</string>
+    <string name="receiving_problem">مشکلی در دریافت اطلاعات وجود دارد</string>
+    <string name="retry">تلاش مجدد</string>
+    <string name="cant_find_contact">مخاطب دیگر وجود ندارد</string>
 </resources>

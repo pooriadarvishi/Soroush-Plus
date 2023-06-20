@@ -13,12 +13,13 @@
     <string name="continue_permission">Continuation</string>
     <string name="syncing">Synchronizing</string>
     <string name="syncing_success">Universalization is complete</string>
-    <string name="permissionFaild">Access to contacts was not granted</string>
-    <string name="cant_find_contact">Contact not found</string>
+    <string name="permission_failed">Access to contacts was not granted</string>
+    <string name="cant_find_contacts">Contacts not found</string>
     <string name="search">search…</string>
     <string name="p">P</string>
     <string name="image_profile">imageProfile</string>
-    <string name="getpermission">GetPermission</string>
+    <string name="get_permission">GetPermission</string>
     <string name="receiving_problem">There was a problem receiving information</string>
     <string name="retry">Retry</string>
+    <string name="cant_find_contact">The audience no longer exists</string>
 </resources>

@@ -43,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
-            android:text="@string/cant_find_contact"
+            android:text="@string/cant_find_contacts"
             android:textSize="@dimen/_24sp"
             android:visibility="invisible"
             app:drawableTopCompat="@drawable/ic_not_find"

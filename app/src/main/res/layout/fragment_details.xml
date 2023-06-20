@@ -13,13 +13,14 @@
 
         <TextView
             android:id="@+id/tv_notFind"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center"
+            android:visibility="invisible"
             android:text="@string/cant_find_contact"
             android:textSize="@dimen/_24sp"
-            android:visibility="invisible"
-            app:drawableTopCompat="@drawable/ic_not_find"
+            app:drawableTopCompat="@drawable/ic_can_not_find"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
