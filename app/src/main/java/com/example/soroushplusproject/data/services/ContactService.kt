@@ -5,9 +5,15 @@ import android.content.Intent
 import android.os.IBinder
 import android.provider.ContactsContract
 import com.example.soroushplusproject.data.contents_provider.ContentObserver
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-class ContactService @Inject constructor(private val contentObserver: ContentObserver) : Service() {
+
+@AndroidEntryPoint
+class ContactService  : Service() {
+
+    @Inject
+    lateinit var contentObserver: ContentObserver
     override fun onBind(intent: Intent?): IBinder? = null
 
 
