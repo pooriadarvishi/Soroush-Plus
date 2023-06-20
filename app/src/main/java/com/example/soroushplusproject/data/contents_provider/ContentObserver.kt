@@ -22,20 +22,22 @@ class ContentObserver(
 
     }
 
-    private var job = Job()
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
+    private var job: Job? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
 
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
-        job.cancel()
-        if (context.grantedPermission()) coroutineScope.launch {
-            syncContacts() }
+        job?.cancel()
+        job = coroutineScope.launch { syncContacts() }
     }
 
+
     suspend fun syncContacts() {
-        localDataSource.insertContacts(newContacts())
-        deletedContacts().forEach { localDataSource.deleteContactById(it) }
+        if (context.grantedPermission()) {
+            localDataSource.insertContacts(newContacts())
+            deletedContacts().forEach { localDataSource.deleteContactById(it) }
+        }
     }
 
 
