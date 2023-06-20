@@ -4,13 +4,13 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.Settings
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.soroushplusproject.R
+import com.example.soroushplusproject.data.services.ContactService
 import com.example.soroushplusproject.domain.base.InteractState
 import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.grantedPermission
@@ -24,10 +24,7 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) onGrantedPermission()
-        else {
-            onShowSnackBarError()
-            unGrantedPermission()
-        }
+        else unGrantedPermission()
     }
 
 
@@ -44,12 +41,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!permissionRequireState()) onShowSnackBarError()
+        if (!permissionState()) onShowSnackBarError()
+        else onOtherSync()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unObserveContact()
+        onDestroyService()
     }
 
 
@@ -80,14 +78,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun onGrantedPermission() {
         observe()
-        observeContacts()
+        onStartedService()
         mainViewModel.grantedPermission()
-        mainViewModel.sync()
+        onFirstSync()
     }
 
     private fun unGrantedPermission() {
         mainViewModel.unGrantedPermission()
-        mainViewModel.sync()
+        onShowSnackBarError()
+        onFirstSync()
     }
 
     private fun onDialog(actionGranted: () -> Unit) {
@@ -115,20 +114,6 @@ class MainActivity : AppCompatActivity() {
     private fun permissionRequireState() = mainViewModel.permissionRequireState()
 
 
-    private fun observeContacts() {
-        val resolver = contentResolver
-        resolver.registerContentObserver(
-            ContactsContract.DeletedContacts.CONTENT_URI, true, mainViewModel.contentObserver()
-        )
-    }
-
-    private fun unObserveContact() {
-        val resolver = contentResolver
-        resolver.unregisterContentObserver(
-            mainViewModel.contentObserver()
-        )
-    }
-
     private fun onShowSnackBarLoading() {
         onShowSnackBar(root, getString(R.string.syncing))
     }
@@ -143,6 +128,23 @@ class MainActivity : AppCompatActivity() {
         ) {
             onSync()
         }
+    }
+
+
+    private fun onFirstSync() {
+        mainViewModel.firstSync()
+    }
+
+    private fun onOtherSync() {
+        mainViewModel.otherSync()
+    }
+
+    private fun onStartedService() {
+        startService(Intent(this, ContactService::class.java))
+    }
+
+    private fun onDestroyService() {
+        stopService(Intent(this, ContactService::class.java))
     }
 
 
