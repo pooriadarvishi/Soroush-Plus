@@ -5,7 +5,7 @@ import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.domain.interactors.GetAllContactUseCase
 import com.example.soroushplusproject.domain.interactors.SearchContactsUseCse
 import com.example.soroushplusproject.ui.base.BaseViewModel
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

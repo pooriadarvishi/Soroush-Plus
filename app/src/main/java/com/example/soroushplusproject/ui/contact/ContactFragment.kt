@@ -11,7 +11,7 @@ import com.example.soroushplusproject.databinding.FragmentContactBinding
 import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.ui.base.BaseFragment
 import com.example.soroushplusproject.ui.contact.adapter.ContactAdapter
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactItem
 import dagger.hilt.android.AndroidEntryPoint
 
 

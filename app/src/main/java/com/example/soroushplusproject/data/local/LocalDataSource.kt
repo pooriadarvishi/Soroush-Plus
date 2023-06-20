@@ -1,8 +1,8 @@
 package com.example.soroushplusproject.data.local
 
 import com.example.soroushplusproject.data.model.ContactEntity
-import com.example.soroushplusproject.ui.models.ContactDetails
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactDetails
+import com.example.soroushplusproject.data.model.ContactItem
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {

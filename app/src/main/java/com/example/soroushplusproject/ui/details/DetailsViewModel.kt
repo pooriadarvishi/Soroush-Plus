@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.domain.interactors.GetContactByIdUseCase
 import com.example.soroushplusproject.ui.base.BaseViewModel
-import com.example.soroushplusproject.ui.models.ContactDetails
+import com.example.soroushplusproject.data.model.ContactDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

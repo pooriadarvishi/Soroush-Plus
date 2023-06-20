@@ -2,8 +2,8 @@ package com.example.soroushplusproject.data
 
 import com.example.soroushplusproject.data.contents_provider.ContentObserver
 import com.example.soroushplusproject.data.local.LocalDataSource
-import com.example.soroushplusproject.ui.models.ContactDetails
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactDetails
+import com.example.soroushplusproject.data.model.ContactItem
 import kotlinx.coroutines.flow.Flow
 
 class RepositoryImpl (

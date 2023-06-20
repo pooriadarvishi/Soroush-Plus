@@ -1,4 +1,4 @@
-package com.example.soroushplusproject.ui.models
+package com.example.soroushplusproject.data.model
 
 data class ContactDetails(
     val id : Int?,

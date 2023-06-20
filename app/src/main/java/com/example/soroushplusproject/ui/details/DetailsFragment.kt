@@ -6,7 +6,7 @@ import com.example.soroushplusproject.R
 import com.example.soroushplusproject.databinding.FragmentDetailsBinding
 import com.example.soroushplusproject.domain.base.InteractResultState
 import com.example.soroushplusproject.ui.base.BaseFragment
-import com.example.soroushplusproject.ui.models.ContactDetails
+import com.example.soroushplusproject.data.model.ContactDetails
 import com.example.soroushplusproject.util.asFirst
 import com.example.soroushplusproject.util.loadImage
 import dagger.hilt.android.AndroidEntryPoint

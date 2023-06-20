@@ -2,7 +2,7 @@ package com.example.soroushplusproject.domain.interactors
 
 import com.example.soroushplusproject.data.Repository
 import com.example.soroushplusproject.domain.base.InteractResult
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

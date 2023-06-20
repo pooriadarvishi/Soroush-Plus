@@ -3,7 +3,7 @@ package com.example.soroushplusproject.ui.contact.adapter
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.soroushplusproject.databinding.ContactItemReBinding
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactItem
 import com.example.soroushplusproject.util.asFirst
 import com.example.soroushplusproject.util.loadImage
 

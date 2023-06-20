@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.soroushplusproject.databinding.ContactItemReBinding
-import com.example.soroushplusproject.ui.models.ContactItem
+import com.example.soroushplusproject.data.model.ContactItem
 
 class ContactAdapter(private val onCLick: onClickContact) :
     ListAdapter<ContactItem, ContactViewHolder>(object : DiffUtil.ItemCallback<ContactItem>() {
