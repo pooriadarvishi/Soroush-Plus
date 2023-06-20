@@ -28,7 +28,8 @@ abstract class InteractResult<T,Q> {
         }
 
     }.onStart { emit(InteractResultState.Loading) }.catch {
-        emit(InteractResultState.Error)
+        if (it is NullPointerException) emit(InteractResultState.Empty)
+        else emit(InteractResultState.Error)
     }.flowOn(Dispatchers.IO)
 
 
