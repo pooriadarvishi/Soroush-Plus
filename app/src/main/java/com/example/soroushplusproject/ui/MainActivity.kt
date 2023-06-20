@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -30,12 +31,13 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var root: View
+    private var savedInstanceState = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setUi()
+        setUi(savedInstanceState)
 
     }
 
@@ -51,17 +53,21 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setUi() {
+    private fun setUi(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) this.savedInstanceState = true
         root = findViewById(R.id.fragmentContainerView)
         onSync()
     }
 
     private fun observe() {
         mainViewModel.dataState.observe(this) { dataState ->
-            when (dataState) {
-                InteractState.Error -> onShowSnackBarError()
-                InteractState.Loading -> onShowSnackBarLoading()
-                InteractState.Success -> onShowSnackBarSuccess()
+            if (!savedInstanceState) {
+                Log.e("KosKos", "observe: ", )
+                when (dataState) {
+                    InteractState.Error -> onShowSnackBarError()
+                    InteractState.Loading -> onShowSnackBarLoading()
+                    InteractState.Success -> onShowSnackBarSuccess()
+                }
             }
         }
     }
