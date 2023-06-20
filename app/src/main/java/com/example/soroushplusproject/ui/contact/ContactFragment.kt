@@ -60,20 +60,21 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(R.layout.fragment_c
 
 
     private fun bindEmpty() {
-        binding.progressBar.isInvisible = true
         binding.tvNotFind.isInvisible = false
         binding.rvContacts.isInvisible = true
     }
 
     private fun bindLoading() {
-        binding.progressBar.isInvisible = false
+        binding.shimmerViewContainer.startShimmer()
+        binding.shimmerViewContainer.isInvisible = false
         binding.tvNotFind.isInvisible = true
         binding.rvContacts.isInvisible = true
     }
 
     private fun bindSuccess(contacts: List<ContactItem>) {
         adapter.submitList(contacts)
-        binding.progressBar.isInvisible = true
+        binding.shimmerViewContainer.stopShimmer()
+        binding.shimmerViewContainer.isInvisible = true
         binding.tvNotFind.isInvisible = true
         binding.rvContacts.isInvisible = false
     }
