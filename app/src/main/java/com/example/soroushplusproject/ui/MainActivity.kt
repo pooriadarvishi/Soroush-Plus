@@ -14,7 +14,8 @@ import com.example.soroushplusproject.R
 import com.example.soroushplusproject.domain.base.InteractState
 import com.example.soroushplusproject.ui.permission.showDialog
 import com.example.soroushplusproject.util.grantedPermission
-import com.google.android.material.snackbar.Snackbar
+import com.example.soroushplusproject.util.onShowSnackBar
+import com.example.soroushplusproject.util.onShowSnackBarWithAction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -129,29 +130,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onShowSnackBarLoading() {
-        onShowSnackBar(getString(R.string.syncing))
+        onShowSnackBar(root, getString(R.string.syncing))
     }
 
     private fun onShowSnackBarSuccess() {
-        onShowSnackBar(getString(R.string.syncing_success))
+        onShowSnackBar(root, getString(R.string.syncing_success))
     }
 
     private fun onShowSnackBarError() {
         onShowSnackBarWithAction(
-            getString(R.string.permissionFaild),
-            getString(R.string.getpermission)
+            root, getString(R.string.permissionFaild), getString(R.string.getpermission)
         ) {
             onSync()
         }
-    }
-
-
-    private fun onShowSnackBar(text: String) {
-        Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun onShowSnackBarWithAction(text: String, actionText: String, action: () -> Unit) {
-        Snackbar.make(root, text, Snackbar.LENGTH_INDEFINITE).setAction(actionText) { action() }.show()
     }
 
 
