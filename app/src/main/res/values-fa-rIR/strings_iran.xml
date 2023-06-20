@@ -19,4 +19,5 @@
     <string name="search">جست و جو…</string>
     <string name="p">پ</string>
     <string name="image_profile">تصویر مخاطب</string>
+    <string name="getpermission">درخواست دسترسی</string>
 </resources>

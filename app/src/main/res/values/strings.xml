@@ -18,4 +18,5 @@
     <string name="search">search…</string>
     <string name="p">P</string>
     <string name="image_profile">imageProfile</string>
+    <string name="getpermission">GetPermission</string>
 </resources>

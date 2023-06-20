@@ -23,7 +23,10 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) onGrantedPermission()
-        else unGrantedPermission()
+        else {
+            onShowSnackBarError()
+            unGrantedPermission()
+        }
     }
 
 
@@ -35,18 +38,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUi()
+        onSync()
     }
 
     private fun setUi(){
         root = findViewById(R.id.fragmentContainerView)
-        observe()
     }
 
-
-    override fun onResume() {
-        onSync()
-        super.onResume()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -69,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             onPopUpDialogPermission()
         } else if (!permissionState() && !permissionRequireState()) {
             onShowSettingDialogPermission()
-        } else mainViewModel.sync()
+        } else onGrantedPermission()
     }
 
 
@@ -133,12 +131,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onShowSnackBarError() {
-        onShowSnackBar(getString(R.string.permissionFaild))
+        onShowSnackBarWithAction(
+            getString(R.string.permissionFaild),
+            getString(R.string.getpermission)
+        ) {
+            onSync()
+        }
     }
 
 
     private fun onShowSnackBar(text: String) {
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun onShowSnackBarWithAction(text: String, actionText: String, action: () -> Unit) {
+        Snackbar.make(root, text, Snackbar.LENGTH_INDEFINITE).setAction(actionText) { action() }.show()
     }
 
 
