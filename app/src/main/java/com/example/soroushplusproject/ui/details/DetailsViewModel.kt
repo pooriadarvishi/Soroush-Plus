@@ -31,7 +31,6 @@ class DetailsViewModel @Inject constructor(
     private fun getContactById(contactId: Int) {
         val params = GetContactByIdUseCase.Params(contactId)
         viewModelScope.launch {
-            delay(1000)
             getContactByIdUseCase(params).collect { contact ->
                 _dataState.postValue(contact)
             }
