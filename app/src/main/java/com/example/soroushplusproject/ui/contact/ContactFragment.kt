@@ -60,6 +60,8 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(R.layout.fragment_c
 
 
     private fun bindEmpty() {
+        binding.shimmerViewContainer.stopShimmer()
+        binding.shimmerViewContainer.isInvisible = true
         binding.tvNotFind.isInvisible = false
         binding.rvContacts.isInvisible = true
     }
